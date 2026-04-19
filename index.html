@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyCodeLab - Launcher</title>
+    <link rel="stylesheet" href="navbar.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+            min-height: 100vh;
+        }
+        .main-container {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 24px;
+        }
+        .hero {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+        .hero h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(135deg, #1e293b 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .hero p {
+            color: #475569;
+            margin-top: 12px;
+        }
+        .tools-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .tool-card {
+            background: white;
+            border-radius: 24px;
+            padding: 24px 28px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            transition: all 0.2s;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+        .tool-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.1);
+            border-color: #3b82f6;
+        }
+        .tool-icon { font-size: 3rem; }
+        .tool-info { flex: 1; }
+        .tool-name { font-size: 1.4rem; font-weight: 600; color: #0f172a; }
+        .tool-desc { color: #64748b; margin-top: 6px; }
+        .tool-arrow { font-size: 1.8rem; color: #94a3b8; }
+    </style>
+</head>
+<body>
+
+<div class="navbar-universale">
+    <div class="navbar-container">
+        <div class="navbar-logo">
+            🧠 MyCodeLab
+        </div>
+        <div class="navbar-links">
+            <a href="index.html" class="navbar-link" id="nav-home">🏠 Dashboard</a>
+            <a href="tools/index.html" class="navbar-link" id="nav-weekly">📅 Settimanale</a>
+        </div>
+    </div>
+</div>
+
+<div class="main-container">
+    <div class="hero">
+        <h1>📦 I tuoi strumenti</h1>
+        <p>Seleziona uno strumento per iniziare</p>
+    </div>
+    <div class="tools-grid">
+        <a href="tools/index.html" class="tool-card">
+            <div class="tool-icon">📅</div>
+            <div class="tool-info">
+                <div class="tool-name">Dashboard Settimanale</div>
+                <div class="tool-desc">Tracciamento attività, punti e livelli</div>
+            </div>
+            <div class="tool-arrow">→</div>
+        </a>
+    </div>
+</div>
+
+<script>
+    // Evidenzia la voce corretta nella navbar
+    const path = window.location.pathname;
+    if (path.includes("tools/index.html") || path.includes("/tools/")) {
+        document.getElementById("nav-weekly")?.classList.add("active");
+    } else {
+        document.getElementById("nav-home")?.classList.add("active");
+    }
+</script>
+
+</body>
+</html>

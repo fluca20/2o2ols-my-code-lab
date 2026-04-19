@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Dashboard</title>
+</head>
+<body>
+    <h1>🧪 Test automatico</h1>
+    <p>Verifica che la Dashboard Settimanale sia accessibile...</p>
+    <script>
+        fetch('../tools/index.html')
+            .then(response => {
+                if (response.ok) {
+                    document.body.innerHTML += '<p style="color: green;">✅ Test passato: dashboard trovata</p>';
+                } else {
+                    document.body.innerHTML += '<p style="color: red;">❌ Test fallito: dashboard non trovata</p>';
+                }
+            })
+            .catch(error => {
+                document.body.innerHTML += '<p style="color: red;">❌ Errore: ' + error.message + '</p>';
+            });
+    </script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+/* shared.css - Stile premium unificato per tutti gli strumenti */
+:root {
+    --primary: #3b82f6;
+    --primary-dark: #2563eb;
+    --secondary: #8b5cf6;
+    --dark: #1e293b;
+    --gray: #64748b;
+    --light: #f8fafc;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+    min-height: 100vh;
+    padding: 0;
+}
+
+/* Navbar premium */
+.navbar-premium {
+    background: linear-gradient(135deg, var(--dark) 0%, #0f172a 100%);
+    backdrop-filter: blur(10px);
+    padding: 0 32px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 12px 0;
+}
+
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: white;
+}
+
+.navbar-links {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.navbar-link {
+    color: #cbd5e1;
+    text-decoration: none;
+    padding: 8px 18px;
+    border-radius: 40px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    background: rgba(255,255,255,0.05);
+}
+
+.navbar-link:hover {
+    background: var(--primary);
+    color: white;
+    transform: translateY(-1px);
+}
+
+.navbar-link.active {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 2px 8px rgba(59,130,246,0.4);
+}
+
+/* Container principale */
+.container-premium {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 24px;
+}
+
+/* Card premium */
+.card-premium {
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    box-shadow: 0 20px 35px -10px rgba(0,0,0,0.1);
+    padding: 28px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card-premium:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 25px 40px -12px rgba(0,0,0,0.15);
+}
+
+/* Pulsanti premium */
+.btn-premium {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    border: none;
+    padding: 12px 28px;
+    border-radius: 40px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.95rem;
+}
+
+.btn-premium:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 20px rgba(59,130,246,0.4);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+}
+
+.btn-outline:hover {
+    background: var(--primary);
+    color: white;
+}
+
+/* Titoli */
+h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--dark) 0%, var(--primary) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 24px;
+}
+
+h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 16px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .navbar-container {
+        flex-direction: column;
+        gap: 12px;
+        padding: 16px;
+    }
+    .container-premium {
+        padding: 20px 16px;
+    }
+    h1 { font-size: 1.6rem; }
+}

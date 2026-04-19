@@ -1,0 +1,291 @@
+/* Impostazioni generali per tutta la pagina */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f9;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+}
+
+/* Stile del titolo principale */
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;
+}
+
+/* Contenitore principale che tiene insieme le due sezioni */
+.contenitore {
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 25px;
+}
+
+/* Sezione per aggiungere nuove attività */
+.nuova-attivita {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+    border: 1px solid #e0e0e0;
+}
+
+.nuova-attivita h2 {
+    margin-top: 0;
+    color: #2c3e50;
+    font-size: 1.3em;
+    margin-bottom: 15px;
+}
+
+/* Stile per tutti i campi di input e il menu a tendina */
+.nuova-attivita input,
+.nuova-attivita select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.nuova-attivita input:focus,
+.nuova-attivita select:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52,152,219,0.3);
+}
+
+/* Stile del pulsante Aggiungi */
+#aggiungiBtn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+#aggiungiBtn:hover {
+    background-color: #2980b9;
+}
+
+/* Sezione della lista attività */
+.lista-attivita h2 {
+    color: #2c3e50;
+    font-size: 1.3em;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+}
+
+/* Contenitore dove vanno le singole attività */
+#contenitoreAttivita {
+    min-height: 200px;
+}
+
+/* Stile di ogni singola attività (sarà creato da JavaScript) */
+.attivita {
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.attivita:hover {
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+/* Contenitore delle informazioni dell'attività */
+.info-attivita {
+    flex: 1;
+}
+
+/* Nome dell'attività */
+.nome-attivita {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 5px;
+}
+
+/* Dettagli aggiuntivi (descrizione, categoria, giorno) */
+.dettagli-attivita {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.dettagli-attivita span {
+    margin-right: 15px;
+}
+
+/* Colori per lo stato */
+.attivita.svolta .nome-attivita {
+    color: #27ae60;  /* Verde per svolto */
+}
+
+.attivita.non-svolta .nome-attivita {
+    color: #c0392b;  /* Rosso per non svolto */
+}
+
+/* Stile dei pulsanti delle attività */
+.pulsanti-attivita {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-stato {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.btn-stato.svolto {
+    background-color: #27ae60;
+    color: white;
+}
+
+.btn-stato.svolto:hover {
+    background-color: #219a52;
+}
+
+.btn-stato.non-svolto {
+    background-color: #c0392b;
+    color: white;
+}
+
+.btn-stato.non-svolto:hover {
+    background-color: #a93226;
+}
+
+.btn-elimina {
+    background-color: #7f8c8d;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s;
+}
+
+.btn-elimina:hover {
+    background-color: #6c7a7d;
+}
+
+/* Messaggio quando non ci sono attività */
+.messaggio-vuoto {
+    text-align: center;
+    color: #95a5a6;
+    padding: 40px 20px;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+    font-style: italic;
+}
+
+/* Stili per i diversi stati */
+.attivita.da_fare .nome-attivita {
+    color: #c0392b;  /* Rosso */
+}
+
+.attivita.rimandato .nome-attivita {
+    color: #f39c12;  /* Arancione */
+}
+
+.attivita.fatto .nome-attivita {
+    color: #27ae60;  /* Verde */
+}
+
+/* Stile per i pulsanti di stato */
+.btn-stato.da_fare {
+    background-color: #c0392b;
+    color: white;
+}
+
+.btn-stato.rimandato {
+    background-color: #f39c12;
+    color: white;
+}
+
+.btn-stato.fatto {
+    background-color: #27ae60;
+    color: white;
+}
+
+.btn-stato.da_fare:hover {
+    background-color: #a93226;
+}
+
+.btn-stato.rimandato:hover {
+    background-color: #e67e22;
+}
+
+.btn-stato.fatto:hover {
+    background-color: #219a52;
+}
+
+/* Stile per il pulsante modifica */
+.btn-modifica {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s;
+}
+
+.btn-modifica:hover {
+    background-color: #2980b9;
+}
+
+/* Effetto bagliore di base (poi personalizzato da JavaScript) */
+.attivita {
+    transition: box-shadow 0.3s ease, transform 0.2s;
+}
+
+.attivita:hover {
+    transform: translateY(-2px);
+}
+
+/* Stile per il select multiplo */
+#giorniSelect[multiple] {
+    height: auto;
+    min-height: 120px;
+    background-color: white;
+}
+
+#giorniSelect[multiple] option {
+    padding: 8px 12px;
+    margin: 2px 0;
+    border-radius: 4px;
+}
+
+#giorniSelect[multiple] option:checked {
+    background-color: #3498db;
+    color: white;
+}
+
+/* Piccola nota per l'utente */
+small {
+    font-size: 0.85em;
+    color: #666;
+    margin-top: 5px;
+}

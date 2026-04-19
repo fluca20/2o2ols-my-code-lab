@@ -1,0 +1,3 @@
+@echo off
+echo 🚀 Avvio Dashboard Settimanale...
+start tools/index.html

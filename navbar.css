@@ -1,0 +1,67 @@
+/* navbar.css - Solo per la barra di navigazione, non interferisce con altri stili */
+.navbar-universale {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    padding: 0 24px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 12px 0;
+    gap: 16px;
+}
+
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: white;
+}
+
+.navbar-links {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.navbar-link {
+    color: #cbd5e1;
+    text-decoration: none;
+    padding: 8px 20px;
+    border-radius: 40px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    background: rgba(255,255,255,0.05);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.navbar-link:hover {
+    background: #3b82f6;
+    color: white;
+    transform: translateY(-1px);
+}
+
+.navbar-link.active {
+    background: #3b82f6;
+    color: white;
+    box-shadow: 0 2px 8px rgba(59,130,246,0.4);
+}
+
+@media (max-width: 700px) {
+    .navbar-container {
+        flex-direction: column;
+        text-align: center;
+    }
+}
