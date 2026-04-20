@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Advisor – Trova la miglior AI gratis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        main {
+            padding: 30px;
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .left-panel {
+            flex: 2;
+            min-width: 300px;
+        }
+
+        .right-panel {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .input-section {
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            color: #1e293b;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .confirmation-box, .result-box {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            border-left: 5px solid #667eea;
+        }
+
+        .ai-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+        }
+
+        .ai-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .ai-card a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .ai-card a:hover {
+            text-decoration: underline;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #22c55e;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-left: 10px;
+        }
+
+        .detail-row {
+            margin: 10px 0;
+            padding: 8px;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        .detail-label {
+            font-weight: 700;
+            color: #1e293b;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .history-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .history-item {
+            background: #f1f5f9;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .history-item:hover {
+            background: #e2e8f0;
+            transform: translateX(5px);
+        }
+
+        .history-item strong {
+            color: #667eea;
+        }
+
+        select {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            margin-right: 10px;
+        }
+
+        #clearHistoryBtn {
+            background: #ef4444;
+            margin-top: 10px;
+        }
+
+        .click-hint {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+
+        .chat-area {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .chat-messages {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 12px;
+        }
+
+        .message {
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+        }
+
+        .message.user {
+            background: #667eea;
+            color: white;
+            text-align: right;
+        }
+
+        .message.ai {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <link rel="stylesheet" href="../launcher/navbar.css">
+
+    <div class="navbar-universale">
+        <div class="navbar-container">
+            <div class="navbar-logo">
+                🧠 MyCodeLab
+            </div>
+            <div class="navbar-links">
+                <a href="../launcher/index.html" class="navbar-link">🏠 Dashboard</a>
+                <a href="../weekly-dashboard/index.html" class="navbar-link">📅 Settimanale</a>
+                <a href="index.html" class="navbar-link active">🤖 AI Advisor</a>
+            </div>
+        </div>
+    </div>
+    <div style="height: 20px;"></div>
+    <div class="container">
+        <header>
+            <h1>🤖 AI Advisor</h1>
+            <p>Neutrale 100% – Solo AI gratuite e sicure – Chat interattiva</p>
+        </header>
+
+        <main>
+            <div class="left-panel">
+                <div class="input-section">
+                    <label for="taskInput">Cosa devi fare?</label>
+                    <textarea id="taskInput" rows="3" placeholder="Es. rimuovere lo sfondo di una foto, trascrivere un audio di 10 minuti, creare un codice Python..."></textarea>
+                    <button id="analyzeBtn">🔍 Analizza e trova Top 3 AI</button>
+                </div>
+
+                <div id="confirmationBox" style="display:none;" class="confirmation-box">
+                    <p>📌 <strong>Ho capito che vuoi:</strong> <span id="guessedCategory"></span></p>
+                    <p>È corretto?</p>
+                    <button id="confirmYes">✅ Sì, prosegui</button>
+                    <button id="confirmNo">❌ No, correggi</button>
+                    <div id="manualCorrection" style="display:none; margin-top:10px;">
+                        <select id="categorySelect">
+                            <option value="testo">Testo</option>
+                            <option value="audio">Audio</option>
+                            <option value="immagini">Immagini</option>
+                            <option value="video">Video</option>
+                            <option value="dati">Dati / Tabelle</option>
+                            <option value="codice">Codice</option>
+                            <option value="misto">Misto</option>
+                        </select>
+                        <button id="manualConfirm">Conferma correzione</button>
+                    </div>
+                </div>
+
+                <div id="resultBox" style="display:none;" class="result-box">
+                    <h2>🏆 Top 3 AI consigliate</h2>
+                    <div id="top3List"></div>
+                    <button id="newChatBtn">➕ Nuova chat</button>
+                </div>
+
+                <div id="chatArea" style="display:none;" class="chat-area">
+                    <h3>💬 Chat con AI Advisor</h3>
+                    <div id="chatMessages" class="chat-messages">
+                        <div class="message ai">👋 Ciao! Ora puoi chiedermi chiarimenti sulla top 3, correggere la categoria o approfondire qualsiasi AI.</div>
+                    </div>
+                    <div class="chat-input-area">
+                        <input type="text" id="chatInput" placeholder="Scrivi qui... es. 'Spiegami meglio l'AI #1' o 'Correggi in audio'">
+                        <button id="sendChatBtn">Invia</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <div class="history-section">
+                    <h3>📜 Storico ricerche</h3>
+                    <div class="click-hint">💡 Clicca su qualsiasi ricerca per riaprila</div>
+                    <div id="historyList"></div>
+                    <button id="clearHistoryBtn">🗑️ Cancella storico</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // ======================= DATABASE AI =======================
+        const aiDatabase = [
+            // CODICE
+            { nome: "Codeium", categoria: "codice", url: "https://codeium.com", gratis: true, sicurezza: "Non salva i tuoi dati. Non usa il codice privato per training. Anonimo possibile.", limiti: "Nessun limite per uso personale. Completa", punti_forza: "Completamente gratis, velocissimo, estensione VS Code e chat web." },
+            { nome: "Cline", categoria: "codice", url: "https://cline.bot", gratis: false, sicurezza: "BYOK (porti la tua chiave API) o modello locale offline. Massima privacy.", limiti: "Richiede API key (costo ~$5-12/mese) o computer potente per modello locale.", punti_forza: "Autonomo, legge tutto il progetto, modifica file, esegue comandi." },
+            { nome: "Qwen-Coder", categoria: "codice", url: "https://huggingface.co/spaces/Qwen/Qwen2.5-Coder-32B-Instruct", gratis: true, sicurezza: "Anonimo. Hugging Face non salva le tue conversazioni.", limiti: "Coda di attesa nei picchi. Max 30 richieste/giorno circa.", punti_forza: "Open source, ottimo per snippet e debug, nessuna registrazione." },
+            
+            // IMMAGINI
+            { nome: "Kandinsky 3.0", categoria: "immagini", url: "https://huggingface.co/spaces/kandinsky-community/kandinsky-3", gratis: true, sicurezza: "Completamente anonimo. Nessun login richiesto.", limiti: "Coda di attesa. Generazione lenta (20-40 secondi).", punti_forza: "Qualità alta, meno conosciuta, ottima per arte e stili insoliti." },
+            { nome: "Remove.bg", categoria: "immagini", url: "https://remove.bg", gratis: true, sicurezza: "File cancellati dopo 1 ora. Non usati per training.", limiti: "Prime 5 foto gratis. Dopo serve credito o abbonamento.", punti_forza: "Migliore in assoluto per rimuovere sfondi. Automatico." },
+            { nome: "Stable Diffusion (HF)", categoria: "immagini", url: "https://huggingface.co/spaces/stabilityai/stable-diffusion", gratis: true, sicurezza: "Open source. Le demo HF sono anonime.", limiti: "Lento nei picchi. Non permette modelli personalizzati.", punti_forza: "Completa libertà creativa, milioni di stili possibili." },
+            { nome: "Gradio + Replicate", categoria: "immagini", url: "https://gradio.app", gratis: true, sicurezza: "Locale o cloud. Se usi Replicate, i file sono temporanei.", limiti: "Richiede Python base. Non è un tool pronto.", punti_forza: "Crea dashboard personalizzate con slider e anteprime in tempo reale." },
+            { nome: "Streamlit + Pillow", categoria: "immagini", url: "https://streamlit.io", gratis: true, sicurezza: "Locale al 100% se usato sul tuo computer. Zero dati inviati.", limiti: "Serve sapere Python base. Non è un'app già fatta.", punti_forza: "Dashboard professionale, modifica foto in tempo reale, interattiva." },
+            { nome: "ComfyUI", categoria: "immagini", url: "https://github.com/comfyanonymous/ComfyUI", gratis: true, sicurezza: "Locale, offline, nessun dato esce dal tuo PC.", limiti: "Curva di apprendimento alta. Serve GPU decente.", punti_forza: "Dashboard a nodi per modifiche avanzate e workflow complessi." },
+            
+            // AUDIO
+            { nome: "Whisper", categoria: "audio", url: "https://openai.com/whisper", gratis: true, sicurezza: "Locale se usato offline con modello scaricato. Online via HF: file cancellati.", limiti: "Nessuno se usato locale. Online: file max 25MB.", punti_forza: "Migliore trascrizione automatica. Supporta 100+ lingue." },
+            { nome: "Uberduck", categoria: "audio", url: "https://uberduck.ai", gratis: true, sicurezza: "Anonimo possibile. Non salva le voci generate se non registri.", limiti: "Watermark in alcune voci gratis. Limitato a 50 generazioni/mese.", punti_forza: "Voci realistiche e famose (rapper, attori)." },
+            
+            // TESTO
+            { nome: "Mistral Le Chat", categoria: "testo", url: "https://chat.mistral.ai", gratis: true, sicurezza: "Non usa i tuoi dati per training. Opzione di eliminazione chat.", limiti: "Nessuno. Gratis senza carta di credito.", punti_forza: "Italiano perfetto, velocissima, nessuna censura pesante." },
+            { nome: "Claude (gratis)", categoria: "testo", url: "https://claude.ai", gratis: true, sicurezza: "Opzione anonima con email usa e getta. Non vendono dati.", limiti: "Messaggi limitati (circa 20 ogni 8 ore).", punti_forza: "Ragionamento profondo, ottimo per documenti lunghi." },
+            
+            // VIDEO
+            { nome: "Runway ML (gratis)", categoria: "video", url: "https://runwayml.com", gratis: true, sicurezza: "File temporanei cancellati dopo elaborazione.", limiti: "125 crediti gratis una tantum. Poi piano a pagamento.", punti_forza: "Facile da usare, rimozione sfondi da video, generazione." },
+            
+            // DATI
+            { nome: "Google Colab (gratis)", categoria: "dati", url: "https://colab.research.google.com", gratis: true, sicurezza: "Account Google richiesto. I notebook sono privati di default.", limiti: "GPU limitata e sessioni max 12 ore.", punti_forza: "Potente per analisi dati, Python, machine learning gratis." }
+        ];
+
+        // ======================= LOGICA PRINCIPALE =======================
+        let history = JSON.parse(localStorage.getItem('ai_history') || '[]');
+        let currentTop3 = [];
+        let currentCategory = "";
+        let currentTask = "";
+
+        function saveHistory() {
+            localStorage.setItem('ai_history', JSON.stringify(history));
+        }
+
+        function renderHistory() {
+            const historyDiv = document.getElementById('historyList');
+            if (!historyDiv) return;
+            
+            if (history.length === 0) {
+                historyDiv.innerHTML = '<p style="color:#64748b;">Nessuna ricerca salvata</p>';
+                return;
+            }
+            
+            historyDiv.innerHTML = history.map((item, idx) => `
+                <div class="history-item" data-id="${item.id}">
+                    <strong>📌 ${item.task.substring(0, 60)}${item.task.length > 60 ? '...' : ''}</strong><br>
+                    🏆 Top: ${item.top1}<br>
+                    📅 ${new Date(item.date).toLocaleString()}
+                </div>
+            `).join('');
+            
+            document.querySelectorAll('.history-item').forEach(el => {
+                el.addEventListener('click', (e) => {
+                    const id = parseInt(el.getAttribute('data-id'));
+                    const found = history.find(h => h.id === id);
+                    if (found) {
+                        restoreChat(found);
+                    }
+                });
+            });
+        }
+
+        function restoreChat(chatItem) {
+            document.getElementById('taskInput').value = chatItem.task;
+            const guessed = analyzeTask(chatItem.task);
+            document.getElementById('guessedCategory').innerText = guessed;
+            document.getElementById('confirmationBox').style.display = 'block';
+            document.getElementById('resultBox').style.display = 'none';
+            document.getElementById('chatArea').style.display = 'none';
+            document.getElementById('manualCorrection').style.display = 'none';
+            
+            currentTask = chatItem.task;
+            currentCategory = guessed;
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function analyzeTask(taskText) {
+            const lower = taskText.toLowerCase();
+            if (lower.includes('codice') || lower.includes('programma') || lower.includes('python') || lower.includes('javascript')) return 'codice';
+            if (lower.includes('sfondo') || lower.includes('immagine') || lower.includes('foto') || lower.includes('disegno') || (lower.includes('dashboard') && lower.includes('foto'))) return 'immagini';
+            if (lower.includes('audio') || lower.includes('trascrivere') || lower.includes('registrazione')) return 'audio';
+            if (lower.includes('video') || lower.includes('montaggio')) return 'video';
+            if (lower.includes('dati') || lower.includes('tabella') || lower.includes('csv') || lower.includes('analisi')) return 'dati';
+            if (lower.includes('testo') || lower.includes('articolo') || lower.includes('traduci') || lower.includes('riassunto')) return 'testo';
+            return 'misto';
+        }
+
+        function getTop3AI(category, taskText) {
+            let filtered = aiDatabase.filter(ai => ai.categoria === category);
+            if (filtered.length === 0) filtered = aiDatabase.filter(ai => ai.categoria === 'misto');
+            filtered.sort((a,b) => (b.gratis === true ? 1 : 0) - (a.gratis === true ? 1 : 0));
+            return filtered.slice(0,3);
+        }
+
+        function renderTop3(aiList) {
+            if (!aiList || aiList.length === 0) {
+                document.getElementById('top3List').innerHTML = '<p style="color:red;">Nessuna AI trovata per questa categoria</p>';
+                return;
+            }
+            
+            const html = aiList.map((ai, idx) => `
+                <div class="ai-card">
+                    <h3>${idx+1}. ${ai.nome} ${ai.gratis ? '<span class="badge">✅ 100% Gratis</span>' : '<span class="badge">⚠️ Gratis con limiti</span>'}</h3>
+                    <div class="detail-row">
+                        <span class="detail-label">🔗 Link</span>
+                        <a href="${ai.url}" target="_blank">${ai.url}</a>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">💪 Perché è adatta</span>
+                        ${ai.punti_forza}
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">🔒 Sicurezza & Privacy</span>
+                        ${ai.sicurezza}
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">⚠️ Limiti da conoscere</span>
+                        ${ai.limiti}
+                    </div>
+                </div>
+            `).join('');
+            
+            document.getElementById('top3List').innerHTML = html;
+        }
+
+        function addChatMessage(sender, text) {
+            const chatDiv = document.getElementById('chatMessages');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${sender}`;
+            msgDiv.innerHTML = text;
+            chatDiv.appendChild(msgDiv);
+            chatDiv.scrollTop = chatDiv.scrollHeight;
+        }
+
+        function handleChatQuestion(question) {
+            const q = question.toLowerCase();
+            if (q.includes('correggi') || q.includes('categoria')) {
+                addChatMessage('ai', "📌 Dimmi la nuova categoria tra: testo, audio, immagini, video, dati, codice, misto.");
+                window.waitingForCategory = true;
+            } else if (window.waitingForCategory) {
+                const newCat = q.trim();
+                const validCats = ['testo','audio','immagini','video','dati','codice','misto'];
+                if (validCats.includes(newCat)) {
+                    const top3 = getTop3AI(newCat, currentTask);
+                    currentTop3 = top3;
+                    currentCategory = newCat;
+                    renderTop3(top3);
+                    addChatMessage('ai', `✅ Categoria cambiata in "${newCat}". Ecco la nuova top 3 qui sopra.`);
+                    window.waitingForCategory = false;
+                } else {
+                    addChatMessage('ai', "Categoria non valida. Scegli tra: testo, audio, immagini, video, dati, codice, misto.");
+                }
+            } else if (q.includes('spiegami') || q.includes('dettaglio')) {
+                addChatMessage('ai', "Quale AI vuoi che ti spieghi meglio? Scrivi il numero (1,2,3) o il nome.");
+                window.waitingForExplain = true;
+            } else if (window.waitingForExplain) {
+                let idx = parseInt(q);
+                if (isNaN(idx) || idx < 1 || idx > 3) {
+                    addChatMessage('ai', "Scrivi il numero 1, 2 o 3 per scegliere l'AI da approfondire.");
+                } else {
+                    const ai = currentTop3[idx-1];
+                    addChatMessage('ai', `📘 **${ai.nome}**\n\n${ai.punti_forza}\n\n🔒 ${ai.sicurezza}\n\n⚠️ ${ai.limiti}\n\n🔗 ${ai.url}`);
+                    window.waitingForExplain = false;
+                }
+            } else {
+                addChatMessage('ai', "Posso aiutarti a:\n- Correggere la categoria (scrivi 'correggi')\n- Spiegarti meglio un'AI (scrivi 'spiegami')\n- Darti un consiglio generico. Cosa ti serve?");
+            }
+        }
+
+        // ======================= EVENTI =======================
+        document.addEventListener('DOMContentLoaded', () => {
+            renderHistory();
+            
+            document.getElementById('analyzeBtn').addEventListener('click', () => {
+                const task = document.getElementById('taskInput').value.trim();
+                if (!task) {
+                    alert('Scrivi cosa devi fare');
+                    return;
+                }
+                const guessed = analyzeTask(task);
+                document.getElementById('guessedCategory').innerText = guessed;
+                document.getElementById('confirmationBox').style.display = 'block';
+                document.getElementById('resultBox').style.display = 'none';
+                document.getElementById('chatArea').style.display = 'none';
+                document.getElementById('manualCorrection').style.display = 'none';
+                
+                currentTask = task;
+                currentCategory = guessed;
+            });
+            
+            document.getElementById('confirmYes').addEventListener('click', () => {
+                const top3 = getTop3AI(currentCategory, currentTask);
+                currentTop3 = top3;
+                renderTop3(top3);
+                document.getElementById('confirmationBox').style.display = 'none';
+                document.getElementById('resultBox').style.display = 'block';
+                document.getElementById('chatArea').style.display = 'block';
+                
+                if (top3 && top3.length > 0) {
+                    const exists = history.some(h => h.task === currentTask && h.category === currentCategory);
+                    if (!exists) {
+                        history.unshift({
+                            id: Date.now(),
+                            task: currentTask,
+                            category: currentCategory,
+                            top1: top3[0]?.nome || 'N/A',
+                            date: new Date().toISOString()
+                        });
+                        if (history.length > 20) history.pop();
+                        saveHistory();
+                        renderHistory();
+                    }
+                }
+            });
+            
+            document.getElementById('confirmNo').addEventListener('click', () => {
+                document.getElementById('manualCorrection').style.display = 'block';
+            });
+            
+            document.getElementById('manualConfirm').addEventListener('click', () => {
+                const newCat = document.getElementById('categorySelect').value;
+                currentCategory = newCat;
+                const top3 = getTop3AI(newCat, currentTask);
+                currentTop3 = top3;
+                renderTop3(top3);
+                document.getElementById('confirmationBox').style.display = 'none';
+                document.getElementById('resultBox').style.display = 'block';
+                document.getElementById('chatArea').style.display = 'block';
+                document.getElementById('manualCorrection').style.display = 'none';
+                
+                const exists = history.some(h => h.task === currentTask && h.category === newCat);
+                if (!exists && top3.length > 0) {
+                    history.unshift({
+                        id: Date.now(),
+                        task: currentTask,
+                        category: newCat,
+                        top1: top3[0]?.nome || 'N/A',
+                        date: new Date().toISOString()
+                    });
+                    if (history.length > 20) history.pop();
+                    saveHistory();
+                    renderHistory();
+                }
+            });
+            
+            document.getElementById('newChatBtn').addEventListener('click', () => {
+                document.getElementById('taskInput').value = '';
+                document.getElementById('resultBox').style.display = 'none';
+                document.getElementById('confirmationBox').style.display = 'none';
+                document.getElementById('chatArea').style.display = 'none';
+                document.getElementById('manualCorrection').style.display = 'none';
+                document.getElementById('chatMessages').innerHTML = '<div class="message ai">👋 Ciao! Ora puoi chiedermi chiarimenti sulla top 3, correggere la categoria o approfondire qualsiasi AI.</div>';
+                window.waitingForCategory = false;
+                window.waitingForExplain = false;
+            });
+            
+            document.getElementById('sendChatBtn').addEventListener('click', () => {
+                const input = document.getElementById('chatInput');
+                const text = input.value.trim();
+                if (!text) return;
+                addChatMessage('user', text);
+                handleChatQuestion(text);
+                input.value = '';
+            });
+            
+            document.getElementById('clearHistoryBtn').addEventListener('click', () => {
+                if (confirm('Cancellare tutto lo storico?')) {
+                    history = [];
+                    saveHistory();
+                    renderHistory();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

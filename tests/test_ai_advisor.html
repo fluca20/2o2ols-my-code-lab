@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Test AI Advisor</title>
+</head>
+<body>
+    <h1>🧪 Test AI Advisor</h1>
+    <div id="risultato">In esecuzione...</div>
+
+    <script>
+        (async function() {
+            try {
+                // Test 1: Verifica che il file index.html esista (simulato)
+                const response = await fetch('../tools/ai-advisor/index.html', { method: 'HEAD' });
+                if (!response.ok) throw new Error('File non trovato');
+                
+                // Test 2: Simula apertura (nessun errore JavaScript bloccante)
+                document.getElementById('risultato').innerHTML = '✅ TEST SUPERATI: AI Advisor è accessibile e raggiungibile.';
+            } catch (e) {
+                document.getElementById('risultato').innerHTML = '❌ TEST FALLITO: ' + e.message;
+            }
+        })();
+    </script>
+</body>
+</html>

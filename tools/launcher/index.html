@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+    <link rel="stylesheet" href="navbar.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyCodeLab - Launcher</title>
-    <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="../shared.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -69,8 +70,9 @@
             🧠 MyCodeLab
         </div>
         <div class="navbar-links">
-            <a href="index.html" class="navbar-link" id="nav-home">🏠 Dashboard</a>
-            <a href="tools/index.html" class="navbar-link" id="nav-weekly">📅 Settimanale</a>
+            <a href="index.html" class="navbar-link active">🏠 Dashboard</a>
+            <a href="../weekly-dashboard/index.html" class="navbar-link">📅 Settimanale</a>
+            <a href="../ai-advisor/index.html" class="navbar-link">🤖 AI Advisor</a>
         </div>
     </div>
 </div>
@@ -84,11 +86,19 @@
         <p>Seleziona uno strumento per iniziare</p>
     </div>
     <div class="tools-grid">
-        <a href="tools/index.html" class="tool-card">
+        <a href="../weekly-dashboard/index.html" class="tool-card">
             <div class="tool-icon">📅</div>
             <div class="tool-info">
                 <div class="tool-name">Dashboard Settimanale</div>
                 <div class="tool-desc">Tracciamento attività, punti e livelli</div>
+            </div>
+            <div class="tool-arrow">→</div>
+        </a>
+        <a href="../ai-advisor/index.html" class="tool-card">
+            <div class="tool-icon">🤖</div>
+            <div class="tool-info">
+                <div class="tool-name">AI Advisor</div>
+                <div class="tool-desc">Trova la miglior AI gratis per il tuo compito</div>
             </div>
             <div class="tool-arrow">→</div>
         </a>

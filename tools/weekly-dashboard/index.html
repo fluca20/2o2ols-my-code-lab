@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <link rel="stylesheet" href="../launcher/navbar.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Mia Dashboard Settimanale</title>
+    <link rel="stylesheet" href="../shared.css">
+    <link rel="stylesheet" href="style.css">
+    <meta name="robots" content="noindex, nofollow">
+</head>
+<body>
+
+<div class="navbar-universale">
+    <div class="navbar-container">
+        <div class="navbar-logo">
+            🧠 MyCodeLab
+        </div>
+        <div class="navbar-links">
+            <a href="../launcher/index.html" class="navbar-link">🏠 Dashboard</a>
+            <a href="index.html" class="navbar-link active">📅 Settimanale</a>
+            <a href="../ai-advisor/index.html" class="navbar-link">🤖 AI Advisor</a>
+        </div>
+    </div>
+</div>
+
+<div style="font-size: 12px; text-align: center; padding: 20px; color: #64748b;">
+    📌 I tuoi dati sono salvati solo nel tuo browser (localStorage). 
+    Nessun dato viene inviato a server esterni o raccolto dal proprietario del sito.
+</div>
+
+<div style="background: #1e293b; color: white; padding: 12px 24px; margin-bottom: 24px;">
+    <a href="../launcher/index.html" style="color: white; text-decoration: none; font-weight: 500;">← Torna al menu principale</a>
+</div>
+
+<h1>📅 La Mia Dashboard Settimanale</h1>
+
+<div class="contenitore">
+    <div class="nuova-attivita">
+        <h2>Aggiungi Nuova Attività</h2>
+        <input type="text" id="nomeInput" placeholder="Nome attività">
+        <input type="text" id="descrizioneInput" placeholder="Descrizione (opzionale)">
+        <input type="text" id="categoriaInput" placeholder="Categoria (es. Casa, Lavoro)">
+        
+        <select id="giorniSelect" multiple size="5">
+            <option value="Lunedì" selected>📆 Lunedì</option>
+            <option value="Martedì">📆 Martedì</option>
+            <option value="Mercoledì">📆 Mercoledì</option>
+            <option value="Giovedì">📆 Giovedì</option>
+            <option value="Venerdì">📆 Venerdì</option>
+            <option value="Sabato">📆 Sabato</option>
+            <option value="Domenica">📆 Domenica</option>
+        </select>
+        <small class="messaggio-aiuto">
+            💡 Tieni premuto Ctrl (Cmd su Mac) per selezionare più giorni
+        </small>
+        <button id="aggiungiBtn">➕ Aggiungi Attività</button>
+    </div>
+
+    <div class="lista-attivita">
+        <h2>Le Mie Attività</h2>
+        <div id="contenitoreAttivita">
+            <p style="text-align: center; color: #666;">Nessuna attività presente. Aggiungine una!</p>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
