@@ -335,11 +335,18 @@
     <script>
         // ======================= DATABASE AI =======================
         const aiDatabase = [
+            // ========== AUTOMAZIONE / CONFIGURAZIONE (nuova categoria) ==========
+            { nome: "Claude + MCP (Model Context Protocol)", categoria: "automazione", url: "https://claude.ai", gratis: true, sicurezza: "Opzione anonima. Non vendono dati.", limiti: "Messaggi limitati (circa 20 ogni 8 ore) ma MCP è sperimentale.", punti_forza: "Può generare script Python per gestire profili OBS, modificare file di configurazione, automatizzare scene." },
+            { nome: "Mistral + Python scripting", categoria: "automazione", url: "https://chat.mistral.ai", gratis: true, sicurezza: "Non usa dati per training. Chat eliminabili.", limiti: "Nessuno. Gratis senza carta.", punti_forza: "Eccellente per scrivere script di automazione per OBS (es. switch profili via API REST). Spiega passo passo." },
+            { nome: "DeepSeek", categoria: "automazione", url: "https://deepseek.com", gratis: true, sicurezza: "Dati non usati per training. Crittografati.", limiti: "Nessuno. Gratis illimitata.", punti_forza: "Ottima per generare codice di automazione. Può creare un'interfaccia chat per cambiare profilo OBS in base alla tua richiesta." },
+            { nome: "Qwen-Coder", categoria: "automazione", url: "https://huggingface.co/spaces/Qwen/Qwen2.5-Coder-32B-Instruct", gratis: true, sicurezza: "Anonimo. HF non salva conversazioni.", limiti: "Coda di attesa. Max 30 richieste/giorno.", punti_forza: "Specializzato in codice. Può generare script Python per controllare OBS via WebSocket." },
+            { nome: "Codeium", categoria: "automazione", url: "https://codeium.com", gratis: true, sicurezza: "Non salva dati. Anonimo possibile.", limiti: "Nessuno.", punti_forza: "Completamente gratis. Può aiutarti a scrivere script in Python per gestire profili OBS in base a comandi vocali o testuali." },
+    
             // CODICE
             { nome: "Codeium", categoria: "codice", url: "https://codeium.com", gratis: true, sicurezza: "Non salva i tuoi dati. Non usa il codice privato per training. Anonimo possibile.", limiti: "Nessun limite per uso personale. Completa", punti_forza: "Completamente gratis, velocissimo, estensione VS Code e chat web." },
             { nome: "Cline", categoria: "codice", url: "https://cline.bot", gratis: false, sicurezza: "BYOK (porti la tua chiave API) o modello locale offline. Massima privacy.", limiti: "Richiede API key (costo ~$5-12/mese) o computer potente per modello locale.", punti_forza: "Autonomo, legge tutto il progetto, modifica file, esegue comandi." },
             { nome: "Qwen-Coder", categoria: "codice", url: "https://huggingface.co/spaces/Qwen/Qwen2.5-Coder-32B-Instruct", gratis: true, sicurezza: "Anonimo. Hugging Face non salva le tue conversazioni.", limiti: "Coda di attesa nei picchi. Max 30 richieste/giorno circa.", punti_forza: "Open source, ottimo per snippet e debug, nessuna registrazione." },
-            
+    
             // IMMAGINI
             { nome: "Kandinsky 3.0", categoria: "immagini", url: "https://huggingface.co/spaces/kandinsky-community/kandinsky-3", gratis: true, sicurezza: "Completamente anonimo. Nessun login richiesto.", limiti: "Coda di attesa. Generazione lenta (20-40 secondi).", punti_forza: "Qualità alta, meno conosciuta, ottima per arte e stili insoliti." },
             { nome: "Remove.bg", categoria: "immagini", url: "https://remove.bg", gratis: true, sicurezza: "File cancellati dopo 1 ora. Non usati per training.", limiti: "Prime 5 foto gratis. Dopo serve credito o abbonamento.", punti_forza: "Migliore in assoluto per rimuovere sfondi. Automatico." },
@@ -347,20 +354,24 @@
             { nome: "Gradio + Replicate", categoria: "immagini", url: "https://gradio.app", gratis: true, sicurezza: "Locale o cloud. Se usi Replicate, i file sono temporanei.", limiti: "Richiede Python base. Non è un tool pronto.", punti_forza: "Crea dashboard personalizzate con slider e anteprime in tempo reale." },
             { nome: "Streamlit + Pillow", categoria: "immagini", url: "https://streamlit.io", gratis: true, sicurezza: "Locale al 100% se usato sul tuo computer. Zero dati inviati.", limiti: "Serve sapere Python base. Non è un'app già fatta.", punti_forza: "Dashboard professionale, modifica foto in tempo reale, interattiva." },
             { nome: "ComfyUI", categoria: "immagini", url: "https://github.com/comfyanonymous/ComfyUI", gratis: true, sicurezza: "Locale, offline, nessun dato esce dal tuo PC.", limiti: "Curva di apprendimento alta. Serve GPU decente.", punti_forza: "Dashboard a nodi per modifiche avanzate e workflow complessi." },
-            
+    
             // AUDIO
             { nome: "Whisper", categoria: "audio", url: "https://openai.com/whisper", gratis: true, sicurezza: "Locale se usato offline con modello scaricato. Online via HF: file cancellati.", limiti: "Nessuno se usato locale. Online: file max 25MB.", punti_forza: "Migliore trascrizione automatica. Supporta 100+ lingue." },
             { nome: "Uberduck", categoria: "audio", url: "https://uberduck.ai", gratis: true, sicurezza: "Anonimo possibile. Non salva le voci generate se non registri.", limiti: "Watermark in alcune voci gratis. Limitato a 50 generazioni/mese.", punti_forza: "Voci realistiche e famose (rapper, attori)." },
-            
+    
             // TESTO
             { nome: "Mistral Le Chat", categoria: "testo", url: "https://chat.mistral.ai", gratis: true, sicurezza: "Non usa i tuoi dati per training. Opzione di eliminazione chat.", limiti: "Nessuno. Gratis senza carta di credito.", punti_forza: "Italiano perfetto, velocissima, nessuna censura pesante." },
             { nome: "Claude (gratis)", categoria: "testo", url: "https://claude.ai", gratis: true, sicurezza: "Opzione anonima con email usa e getta. Non vendono dati.", limiti: "Messaggi limitati (circa 20 ogni 8 ore).", punti_forza: "Ragionamento profondo, ottimo per documenti lunghi." },
-            
+    
             // VIDEO
             { nome: "Runway ML (gratis)", categoria: "video", url: "https://runwayml.com", gratis: true, sicurezza: "File temporanei cancellati dopo elaborazione.", limiti: "125 crediti gratis una tantum. Poi piano a pagamento.", punti_forza: "Facile da usare, rimozione sfondi da video, generazione." },
-            
+    
             // DATI
-            { nome: "Google Colab (gratis)", categoria: "dati", url: "https://colab.research.google.com", gratis: true, sicurezza: "Account Google richiesto. I notebook sono privati di default.", limiti: "GPU limitata e sessioni max 12 ore.", punti_forza: "Potente per analisi dati, Python, machine learning gratis." }
+            { nome: "Google Colab (gratis)", categoria: "dati", url: "https://colab.research.google.com", gratis: true, sicurezza: "Account Google richiesto. I notebook sono privati di default.", limiti: "GPU limitata e sessioni max 12 ore.", punti_forza: "Potente per analisi dati, Python, machine learning gratis." },
+    
+            // MISTO (ripiego)
+            { nome: "Mistral Le Chat", categoria: "misto", url: "https://chat.mistral.ai", gratis: true, sicurezza: "Non usa dati per training.", limiti: "Nessuno.", punti_forza: "Generale, multilingua, gestisce testo, codice, ragionamento." },
+            { nome: "Claude", categoria: "misto", url: "https://claude.ai", gratis: true, sicurezza: "Opzione anonima.", limiti: "Messaggi limitati.", punti_forza: "Buono per compiti complessi e misti." }
         ];
 
         // ======================= LOGICA PRINCIPALE =======================
@@ -418,6 +429,8 @@
 
         function analyzeTask(taskText) {
             const lower = taskText.toLowerCase();
+            // AUTOMAZIONE (nuova) - priorità alta
+            if (lower.includes('configurare') || lower.includes('configura') || lower.includes('obs') || lower.includes('profilo') || lower.includes('profili') || lower.includes('automazione') || lower.includes('script') || (lower.includes('registrare') && lower.includes('profilo'))) return 'automazione';
             if (lower.includes('codice') || lower.includes('programma') || lower.includes('python') || lower.includes('javascript')) return 'codice';
             if (lower.includes('sfondo') || lower.includes('immagine') || lower.includes('foto') || lower.includes('disegno') || (lower.includes('dashboard') && lower.includes('foto'))) return 'immagini';
             if (lower.includes('audio') || lower.includes('trascrivere') || lower.includes('registrazione')) return 'audio';
