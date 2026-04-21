@@ -20,7 +20,7 @@ my-code-lab/
 ## 🚀 Come avviare
 
 **Doppio click** su `run.bat` nella cartella principale, oppure apri direttamente:
-- `tools/launcher/index.html` per il menu
+- `index.html` per il menu
 - `tools/weekly-dashboard/index.html` per il tracking settimanale
 - `tools/ai-advisor/index.html` per AI Advisor
 
@@ -40,5 +40,5 @@ my-code-lab/
 
 1. Crea cartella in `tools/nome-strumento/`
 2. Inserisci `index.html` (e CSS/JS)
-3. Aggiungi card in `tools/launcher/index.html`
+3. Aggiungi card in `index.html`
 4. Aggiungi link nella navbar di TUTTE le pagine
