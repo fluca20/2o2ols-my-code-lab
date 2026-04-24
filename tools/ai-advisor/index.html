@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="../../navbar.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Advisor – Trova la miglior AI gratis</title>
+    <title>AI Advisor – Analisi Profonda + Top 3 AI</title>
     <style>
         * {
             margin: 0;
@@ -109,7 +109,27 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
 
-        .confirmation-box, .result-box {
+        .analysis-box {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            border-left: 5px solid #667eea;
+        }
+
+        .analysis-detail {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+
+        .analysis-detail p {
+            margin: 5px 0;
+        }
+
+        .result-box {
             background: #f8fafc;
             padding: 20px;
             border-radius: 16px;
@@ -270,36 +290,40 @@
             </div>
         </div>
     </div>
+
     <div class="container">
         <header>
             <h1>🤖 AI Advisor</h1>
-            <p>Neutrale 100% – Solo AI gratuite e sicure – Chat interattiva</p>
+            <p>Analisi profonda del testo – Neutrale 100% – AI gratuite e sicure</p>
         </header>
 
         <main>
             <div class="left-panel">
                 <div class="input-section">
-                    <label for="taskInput">Cosa devi fare?</label>
-                    <textarea id="taskInput" rows="3" placeholder="Es. rimuovere lo sfondo di una foto, trascrivere un audio di 10 minuti, creare un codice Python..."></textarea>
-                    <button id="analyzeBtn">🔍 Analizza e trova Top 3 AI</button>
+                    <label for="taskInput">Cosa devi fare? (scrivi più dettagli possibile)</label>
+                    <textarea id="taskInput" rows="4" placeholder="Es. Devo configurare OBS Studio con profili diversi per registrare gameplay, lezioni e riunioni. Voglio poter cambiare profilo scrivendo in chat cosa sto per registrare..."></textarea>
+                    <button id="analyzeBtn">🔍 Analizza in profondità e trova Top 3 AI</button>
                 </div>
 
-                <div id="confirmationBox" style="display:none;" class="confirmation-box">
-                    <p>📌 <strong>Ho capito che vuoi:</strong> <span id="guessedCategory"></span></p>
-                    <p>È corretto?</p>
-                    <button id="confirmYes">✅ Sì, prosegui</button>
-                    <button id="confirmNo">❌ No, correggi</button>
-                    <div id="manualCorrection" style="display:none; margin-top:10px;">
-                        <select id="categorySelect">
+                <!-- RISULTATI ANALISI DETTAGLIATA -->
+                <div id="analysisBox" style="display:none;" class="analysis-box">
+                    <h3>📊 Analisi dettagliata del compito</h3>
+                    <div id="analysisDetails" class="analysis-detail"></div>
+                    <p><strong>Categoria proposta:</strong> <span id="proposedCategory"></span></p>
+                    <button id="acceptAnalysisBtn">✅ Accetta e prosegui</button>
+                    <button id="rejectAnalysisBtn">❌ Rifiuta e correggi manualmente</button>
+                    <div id="manualCorrectionAnalysis" style="display:none; margin-top:10px;">
+                        <select id="categorySelectManual">
                             <option value="testo">Testo</option>
                             <option value="audio">Audio</option>
                             <option value="immagini">Immagini</option>
                             <option value="video">Video</option>
                             <option value="dati">Dati / Tabelle</option>
                             <option value="codice">Codice</option>
+                            <option value="automazione">Automazione / Configurazione</option>
                             <option value="misto">Misto</option>
                         </select>
-                        <button id="manualConfirm">Conferma correzione</button>
+                        <button id="manualConfirmAnalysis">Conferma correzione</button>
                     </div>
                 </div>
 
@@ -333,148 +357,94 @@
     </div>
 
     <script>
-        // ======================= DATABASE AI =======================
+        // ======================= DATABASE AI (completo con automazione) =======================
         const aiDatabase = [
-            // ========== AUTOMAZIONE / CONFIGURAZIONE (nuova categoria) ==========
-            { nome: "Claude + MCP (Model Context Protocol)", categoria: "automazione", url: "https://claude.ai", gratis: true, sicurezza: "Opzione anonima. Non vendono dati.", limiti: "Messaggi limitati (circa 20 ogni 8 ore) ma MCP è sperimentale.", punti_forza: "Può generare script Python per gestire profili OBS, modificare file di configurazione, automatizzare scene." },
-            { nome: "Mistral + Python scripting", categoria: "automazione", url: "https://chat.mistral.ai", gratis: true, sicurezza: "Non usa dati per training. Chat eliminabili.", limiti: "Nessuno. Gratis senza carta.", punti_forza: "Eccellente per scrivere script di automazione per OBS (es. switch profili via API REST). Spiega passo passo." },
-            { nome: "DeepSeek", categoria: "automazione", url: "https://deepseek.com", gratis: true, sicurezza: "Dati non usati per training. Crittografati.", limiti: "Nessuno. Gratis illimitata.", punti_forza: "Ottima per generare codice di automazione. Può creare un'interfaccia chat per cambiare profilo OBS in base alla tua richiesta." },
-            { nome: "Qwen-Coder", categoria: "automazione", url: "https://huggingface.co/spaces/Qwen/Qwen2.5-Coder-32B-Instruct", gratis: true, sicurezza: "Anonimo. HF non salva conversazioni.", limiti: "Coda di attesa. Max 30 richieste/giorno.", punti_forza: "Specializzato in codice. Può generare script Python per controllare OBS via WebSocket." },
-            { nome: "Codeium", categoria: "automazione", url: "https://codeium.com", gratis: true, sicurezza: "Non salva dati. Anonimo possibile.", limiti: "Nessuno.", punti_forza: "Completamente gratis. Può aiutarti a scrivere script in Python per gestire profili OBS in base a comandi vocali o testuali." },
-    
+            // AUTOMAZIONE
+            { nome: "Claude + MCP", categoria: "automazione", url: "https://claude.ai", gratis: true, sicurezza: "Opzione anonima", limiti: "20 msg/8h", punti_forza: "Genera script Python per OBS, automazione profili" },
+            { nome: "Mistral + Python", categoria: "automazione", url: "https://chat.mistral.ai", gratis: true, sicurezza: "Dati non usati per training", limiti: "Nessuno", punti_forza: "Script automazione OBS API REST" },
+            { nome: "Qwen-Coder", categoria: "automazione", url: "https://huggingface.co/spaces/Qwen/Qwen2.5-Coder-32B-Instruct", gratis: true, sicurezza: "Anonimo", limiti: "Coda attesa", punti_forza: "Specializzato in codice per automazione" },
+            { nome: "Codeium", categoria: "automazione", url: "https://codeium.com", gratis: true, sicurezza: "Non salva dati", limiti: "Nessuno", punti_forza: "Script Python per OBS" },
             // CODICE
-            { nome: "Codeium", categoria: "codice", url: "https://codeium.com", gratis: true, sicurezza: "Non salva i tuoi dati. Non usa il codice privato per training. Anonimo possibile.", limiti: "Nessun limite per uso personale. Completa", punti_forza: "Completamente gratis, velocissimo, estensione VS Code e chat web." },
-            { nome: "Cline", categoria: "codice", url: "https://cline.bot", gratis: false, sicurezza: "BYOK (porti la tua chiave API) o modello locale offline. Massima privacy.", limiti: "Richiede API key (costo ~$5-12/mese) o computer potente per modello locale.", punti_forza: "Autonomo, legge tutto il progetto, modifica file, esegue comandi." },
-            { nome: "Qwen-Coder", categoria: "codice", url: "https://huggingface.co/spaces/Qwen/Qwen2.5-Coder-32B-Instruct", gratis: true, sicurezza: "Anonimo. Hugging Face non salva le tue conversazioni.", limiti: "Coda di attesa nei picchi. Max 30 richieste/giorno circa.", punti_forza: "Open source, ottimo per snippet e debug, nessuna registrazione." },
-    
+            { nome: "Codeium", categoria: "codice", url: "https://codeium.com", gratis: true, sicurezza: "Non salva dati", limiti: "Nessuno", punti_forza: "Completamente gratis" },
+            { nome: "Cline", categoria: "codice", url: "https://cline.bot", gratis: false, sicurezza: "BYOK", limiti: "API key", punti_forza: "Autonomo" },
+            { nome: "Qwen-Coder", categoria: "codice", url: "https://huggingface.co/spaces/Qwen/Qwen2.5-Coder-32B-Instruct", gratis: true, sicurezza: "Anonimo", limiti: "Coda attesa", punti_forza: "Open source" },
             // IMMAGINI
-            { nome: "Kandinsky 3.0", categoria: "immagini", url: "https://huggingface.co/spaces/kandinsky-community/kandinsky-3", gratis: true, sicurezza: "Completamente anonimo. Nessun login richiesto.", limiti: "Coda di attesa. Generazione lenta (20-40 secondi).", punti_forza: "Qualità alta, meno conosciuta, ottima per arte e stili insoliti." },
-            { nome: "Remove.bg", categoria: "immagini", url: "https://remove.bg", gratis: true, sicurezza: "File cancellati dopo 1 ora. Non usati per training.", limiti: "Prime 5 foto gratis. Dopo serve credito o abbonamento.", punti_forza: "Migliore in assoluto per rimuovere sfondi. Automatico." },
-            { nome: "Stable Diffusion (HF)", categoria: "immagini", url: "https://huggingface.co/spaces/stabilityai/stable-diffusion", gratis: true, sicurezza: "Open source. Le demo HF sono anonime.", limiti: "Lento nei picchi. Non permette modelli personalizzati.", punti_forza: "Completa libertà creativa, milioni di stili possibili." },
-            { nome: "Gradio + Replicate", categoria: "immagini", url: "https://gradio.app", gratis: true, sicurezza: "Locale o cloud. Se usi Replicate, i file sono temporanei.", limiti: "Richiede Python base. Non è un tool pronto.", punti_forza: "Crea dashboard personalizzate con slider e anteprime in tempo reale." },
-            { nome: "Streamlit + Pillow", categoria: "immagini", url: "https://streamlit.io", gratis: true, sicurezza: "Locale al 100% se usato sul tuo computer. Zero dati inviati.", limiti: "Serve sapere Python base. Non è un'app già fatta.", punti_forza: "Dashboard professionale, modifica foto in tempo reale, interattiva." },
-            { nome: "ComfyUI", categoria: "immagini", url: "https://github.com/comfyanonymous/ComfyUI", gratis: true, sicurezza: "Locale, offline, nessun dato esce dal tuo PC.", limiti: "Curva di apprendimento alta. Serve GPU decente.", punti_forza: "Dashboard a nodi per modifiche avanzate e workflow complessi." },
-    
+            { nome: "Kandinsky 3.0", categoria: "immagini", url: "https://huggingface.co/spaces/kandinsky-community/kandinsky-3", gratis: true, sicurezza: "Anonimo", limiti: "Coda attesa", punti_forza: "Qualità alta" },
+            { nome: "Remove.bg", categoria: "immagini", url: "https://remove.bg", gratis: true, sicurezza: "File cancellati", limiti: "5 foto gratis", punti_forza: "Migliore sfondi" },
+            { nome: "Stable Diffusion (HF)", categoria: "immagini", url: "https://huggingface.co/spaces/stabilityai/stable-diffusion", gratis: true, sicurezza: "Open source", limiti: "Lento", punti_forza: "Libertà creativa" },
             // AUDIO
-            { nome: "Whisper", categoria: "audio", url: "https://openai.com/whisper", gratis: true, sicurezza: "Locale se usato offline con modello scaricato. Online via HF: file cancellati.", limiti: "Nessuno se usato locale. Online: file max 25MB.", punti_forza: "Migliore trascrizione automatica. Supporta 100+ lingue." },
-            { nome: "Uberduck", categoria: "audio", url: "https://uberduck.ai", gratis: true, sicurezza: "Anonimo possibile. Non salva le voci generate se non registri.", limiti: "Watermark in alcune voci gratis. Limitato a 50 generazioni/mese.", punti_forza: "Voci realistiche e famose (rapper, attori)." },
-    
+            { nome: "Whisper", categoria: "audio", url: "https://openai.com/whisper", gratis: true, sicurezza: "Locale offline", limiti: "Nessuno", punti_forza: "Trascrizione" },
+            { nome: "Uberduck", categoria: "audio", url: "https://uberduck.ai", gratis: true, sicurezza: "Anonimo", limiti: "50 gen/mese", punti_forza: "Voci realistiche" },
             // TESTO
-            { nome: "Mistral Le Chat", categoria: "testo", url: "https://chat.mistral.ai", gratis: true, sicurezza: "Non usa i tuoi dati per training. Opzione di eliminazione chat.", limiti: "Nessuno. Gratis senza carta di credito.", punti_forza: "Italiano perfetto, velocissima, nessuna censura pesante." },
-            { nome: "Claude (gratis)", categoria: "testo", url: "https://claude.ai", gratis: true, sicurezza: "Opzione anonima con email usa e getta. Non vendono dati.", limiti: "Messaggi limitati (circa 20 ogni 8 ore).", punti_forza: "Ragionamento profondo, ottimo per documenti lunghi." },
-    
+            { nome: "Mistral Le Chat", categoria: "testo", url: "https://chat.mistral.ai", gratis: true, sicurezza: "No training", limiti: "Nessuno", punti_forza: "Italiano perfetto" },
+            { nome: "Claude", categoria: "testo", url: "https://claude.ai", gratis: true, sicurezza: "Opzione anonima", limiti: "20 msg/8h", punti_forza: "Ragionamento profondo" },
             // VIDEO
-            { nome: "Runway ML (gratis)", categoria: "video", url: "https://runwayml.com", gratis: true, sicurezza: "File temporanei cancellati dopo elaborazione.", limiti: "125 crediti gratis una tantum. Poi piano a pagamento.", punti_forza: "Facile da usare, rimozione sfondi da video, generazione." },
-    
+            { nome: "Runway ML", categoria: "video", url: "https://runwayml.com", gratis: true, sicurezza: "File temporanei", limiti: "125 crediti", punti_forza: "Editing video" },
             // DATI
-            { nome: "Google Colab (gratis)", categoria: "dati", url: "https://colab.research.google.com", gratis: true, sicurezza: "Account Google richiesto. I notebook sono privati di default.", limiti: "GPU limitata e sessioni max 12 ore.", punti_forza: "Potente per analisi dati, Python, machine learning gratis." },
-    
-            // MISTO (ripiego)
-            { nome: "Mistral Le Chat", categoria: "misto", url: "https://chat.mistral.ai", gratis: true, sicurezza: "Non usa dati per training.", limiti: "Nessuno.", punti_forza: "Generale, multilingua, gestisce testo, codice, ragionamento." },
-            { nome: "Claude", categoria: "misto", url: "https://claude.ai", gratis: true, sicurezza: "Opzione anonima.", limiti: "Messaggi limitati.", punti_forza: "Buono per compiti complessi e misti." }
+            { nome: "Google Colab", categoria: "dati", url: "https://colab.research.google.com", gratis: true, sicurezza: "Account Google", limiti: "GPU limitata", punti_forza: "Analisi dati" },
+            // MISTO
+            { nome: "Mistral Le Chat", categoria: "misto", url: "https://chat.mistral.ai", gratis: true, sicurezza: "No training", limiti: "Nessuno", punti_forza: "Generale" }
         ];
 
-        // ======================= LOGICA PRINCIPALE =======================
-        let history = JSON.parse(localStorage.getItem('ai_history') || '[]');
-        let currentTop3 = [];
-        let currentCategory = "";
-        let currentTask = "";
-
-        function saveHistory() {
-            localStorage.setItem('ai_history', JSON.stringify(history));
+        // ======================= ANALISI PROFONDA =======================
+        function deepAnalyze(text) {
+            const wordCount = text.split(/\s+/).length;
+            const hasHeaders = /^#+\s|^\d+\.\s|^[A-Z][a-z]+:/m.test(text);
+            const hasCode = /```|\bfunction\b|\bdef\b|\bimport\b|\bconst\b|\blet\b|<[^>]+>/.test(text);
+            const hasTechnical = /\bAPI\b|\bscript\b|\bconfigurazione\b|\bautomazione\b|\bprofilo\b|\bOBS\b|\bstreaming\b|\bregistrare\b/i.test(text);
+            const hasCreative = /\bimmagine\b|\bfoto\b|\bdisegno\b|\bcreativo\b/i.test(text);
+            const hasAudio = /\baudio\b|\btrascrivere\b|\bregistrazione\b/i.test(text);
+            const hasVideo = /\bvideo\b|\bmontaggio\b/i.test(text);
+            const hasData = /\bdati\b|\btabella\b|\bcsv\b|\banalisi\b/i.test(text);
+            
+            let category = "misto";
+            if (hasTechnical && (text.includes("OBS") || text.includes("profilo"))) category = "automazione";
+            else if (hasCode) category = "codice";
+            else if (hasAudio) category = "audio";
+            else if (hasCreative) category = "immagini";
+            else if (hasVideo) category = "video";
+            else if (hasData) category = "dati";
+            else if (/scrivere|articolo|traduci/i.test(text)) category = "testo";
+            
+            return { suggestedCategory: category, hasCode, hasTechnical, hasCreative, hasAudio, hasVideo, hasData, wordCount, hasHeaders };
         }
 
-        function renderHistory() {
-            const historyDiv = document.getElementById('historyList');
-            if (!historyDiv) return;
-            
-            if (history.length === 0) {
-                historyDiv.innerHTML = '<p style="color:#64748b;">Nessuna ricerca salvata</p>';
-                return;
-            }
-            
-            historyDiv.innerHTML = history.map((item, idx) => `
-                <div class="history-item" data-id="${item.id}">
-                    <strong>📌 ${item.task.substring(0, 60)}${item.task.length > 60 ? '...' : ''}</strong><br>
-                    🏆 Top: ${item.top1}<br>
-                    📅 ${new Date(item.date).toLocaleString()}
-                </div>
-            `).join('');
-            
-            document.querySelectorAll('.history-item').forEach(el => {
-                el.addEventListener('click', (e) => {
-                    const id = parseInt(el.getAttribute('data-id'));
-                    const found = history.find(h => h.id === id);
-                    if (found) {
-                        restoreChat(found);
-                    }
-                });
-            });
+        function renderAnalysis(analysis) {
+            const html = `
+                <p>📏 <strong>Parole:</strong> ${analysis.wordCount}</p>
+                <p>📑 <strong>Intestazioni:</strong> ${analysis.hasHeaders ? "✅ Sì" : "❌ No"}</p>
+                <p>💻 <strong>Codice presente:</strong> ${analysis.hasCode ? "✅ Sì" : "❌ No"}</p>
+                <p>⚙️ <strong>Contenuto tecnico/OBS:</strong> ${analysis.hasTechnical ? "✅ Sì" : "❌ No"}</p>
+                <p>🎨 <strong>Immagini:</strong> ${analysis.hasCreative ? "✅ Sì" : "❌ No"}</p>
+                <p>🎵 <strong>Audio:</strong> ${analysis.hasAudio ? "✅ Sì" : "❌ No"}</p>
+                <p>🎬 <strong>Video:</strong> ${analysis.hasVideo ? "✅ Sì" : "❌ No"}</p>
+                <p>📊 <strong>Dati:</strong> ${analysis.hasData ? "✅ Sì" : "❌ No"}</p>
+                <p>🎯 <strong>Categoria suggerita:</strong> <strong>${analysis.suggestedCategory}</strong></p>
+            `;
+            document.getElementById('analysisDetails').innerHTML = html;
+            document.getElementById('proposedCategory').innerText = analysis.suggestedCategory;
         }
 
-        function restoreChat(chatItem) {
-            document.getElementById('taskInput').value = chatItem.task;
-            const guessed = analyzeTask(chatItem.task);
-            document.getElementById('guessedCategory').innerText = guessed;
-            document.getElementById('confirmationBox').style.display = 'block';
-            document.getElementById('resultBox').style.display = 'none';
-            document.getElementById('chatArea').style.display = 'none';
-            document.getElementById('manualCorrection').style.display = 'none';
-            
-            currentTask = chatItem.task;
-            currentCategory = guessed;
-            
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function analyzeTask(taskText) {
-            const lower = taskText.toLowerCase();
-            // AUTOMAZIONE (nuova) - priorità alta
-            if (lower.includes('configurare') || lower.includes('configura') || lower.includes('obs') || lower.includes('profilo') || lower.includes('profili') || lower.includes('automazione') || lower.includes('script') || (lower.includes('registrare') && lower.includes('profilo'))) return 'automazione';
-            if (lower.includes('codice') || lower.includes('programma') || lower.includes('python') || lower.includes('javascript')) return 'codice';
-            if (lower.includes('sfondo') || lower.includes('immagine') || lower.includes('foto') || lower.includes('disegno') || (lower.includes('dashboard') && lower.includes('foto'))) return 'immagini';
-            if (lower.includes('audio') || lower.includes('trascrivere') || lower.includes('registrazione')) return 'audio';
-            if (lower.includes('video') || lower.includes('montaggio')) return 'video';
-            if (lower.includes('dati') || lower.includes('tabella') || lower.includes('csv') || lower.includes('analisi')) return 'dati';
-            if (lower.includes('testo') || lower.includes('articolo') || lower.includes('traduci') || lower.includes('riassunto')) return 'testo';
-            return 'misto';
-        }
-
-        function getTop3AI(category, taskText) {
+        function getTop3AI(category) {
             let filtered = aiDatabase.filter(ai => ai.categoria === category);
             if (filtered.length === 0) filtered = aiDatabase.filter(ai => ai.categoria === 'misto');
-            filtered.sort((a,b) => (b.gratis === true ? 1 : 0) - (a.gratis === true ? 1 : 0));
             return filtered.slice(0,3);
         }
 
         function renderTop3(aiList) {
             if (!aiList || aiList.length === 0) {
-                document.getElementById('top3List').innerHTML = '<p style="color:red;">Nessuna AI trovata per questa categoria</p>';
+                document.getElementById('top3List').innerHTML = '<p style="color:red;">Nessuna AI trovata</p>';
                 return;
             }
-            
             const html = aiList.map((ai, idx) => `
                 <div class="ai-card">
-                    <h3>${idx+1}. ${ai.nome} ${ai.gratis ? '<span class="badge">✅ 100% Gratis</span>' : '<span class="badge">⚠️ Gratis con limiti</span>'}</h3>
-                    <div class="detail-row">
-                        <span class="detail-label">🔗 Link</span>
-                        <a href="${ai.url}" target="_blank">${ai.url}</a>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">💪 Perché è adatta</span>
-                        ${ai.punti_forza}
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">🔒 Sicurezza & Privacy</span>
-                        ${ai.sicurezza}
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">⚠️ Limiti da conoscere</span>
-                        ${ai.limiti}
-                    </div>
+                    <h3>${idx+1}. ${ai.nome} ${ai.gratis ? '<span class="badge">✅ Gratis</span>' : '<span class="badge">⚠️ Limitato</span>'}</h3>
+                    <div class="detail-row"><span class="detail-label">🔗 Link</span><a href="${ai.url}" target="_blank">${ai.url}</a></div>
+                    <div class="detail-row"><span class="detail-label">💪 Perché è adatta</span>${ai.punti_forza}</div>
+                    <div class="detail-row"><span class="detail-label">🔒 Privacy</span>${ai.sicurezza}</div>
+                    <div class="detail-row"><span class="detail-label">⚠️ Limiti</span>${ai.limiti}</div>
                 </div>
             `).join('');
-            
             document.getElementById('top3List').innerHTML = html;
         }
 
@@ -487,144 +457,118 @@
             chatDiv.scrollTop = chatDiv.scrollHeight;
         }
 
-        function handleChatQuestion(question) {
-            const q = question.toLowerCase();
-            if (q.includes('correggi') || q.includes('categoria')) {
-                addChatMessage('ai', "📌 Dimmi la nuova categoria tra: testo, audio, immagini, video, dati, codice, misto.");
-                window.waitingForCategory = true;
-            } else if (window.waitingForCategory) {
-                const newCat = q.trim();
-                const validCats = ['testo','audio','immagini','video','dati','codice','misto'];
-                if (validCats.includes(newCat)) {
-                    const top3 = getTop3AI(newCat, currentTask);
-                    currentTop3 = top3;
-                    currentCategory = newCat;
-                    renderTop3(top3);
-                    addChatMessage('ai', `✅ Categoria cambiata in "${newCat}". Ecco la nuova top 3 qui sopra.`);
-                    window.waitingForCategory = false;
-                } else {
-                    addChatMessage('ai', "Categoria non valida. Scegli tra: testo, audio, immagini, video, dati, codice, misto.");
-                }
-            } else if (q.includes('spiegami') || q.includes('dettaglio')) {
-                addChatMessage('ai', "Quale AI vuoi che ti spieghi meglio? Scrivi il numero (1,2,3) o il nome.");
-                window.waitingForExplain = true;
-            } else if (window.waitingForExplain) {
-                let idx = parseInt(q);
-                if (isNaN(idx) || idx < 1 || idx > 3) {
-                    addChatMessage('ai', "Scrivi il numero 1, 2 o 3 per scegliere l'AI da approfondire.");
-                } else {
-                    const ai = currentTop3[idx-1];
-                    addChatMessage('ai', `📘 **${ai.nome}**\n\n${ai.punti_forza}\n\n🔒 ${ai.sicurezza}\n\n⚠️ ${ai.limiti}\n\n🔗 ${ai.url}`);
-                    window.waitingForExplain = false;
-                }
-            } else {
-                addChatMessage('ai', "Posso aiutarti a:\n- Correggere la categoria (scrivi 'correggi')\n- Spiegarti meglio un'AI (scrivi 'spiegami')\n- Darti un consiglio generico. Cosa ti serve?");
-            }
+        // ======================= STATO GLOBALE =======================
+        let history = JSON.parse(localStorage.getItem('ai_history') || '[]');
+        let currentAnalysis = null;
+        let currentTask = "";
+        let currentCategory = "";
+        let currentTop3 = [];
+
+        function saveHistory() { localStorage.setItem('ai_history', JSON.stringify(history)); }
+
+        function renderHistory() {
+            const historyDiv = document.getElementById('historyList');
+            if (!historyDiv) return;
+            if (history.length === 0) { historyDiv.innerHTML = '<p style="color:#64748b;">Nessuna ricerca</p>'; return; }
+            historyDiv.innerHTML = history.map((item, idx) => `
+                <div class="history-item" data-id="${item.id}">
+                    <strong>📌 ${item.task.substring(0, 60)}</strong><br>🏆 ${item.top1}<br>📅 ${new Date(item.date).toLocaleString()}
+                </div>
+            `).join('');
+            document.querySelectorAll('.history-item').forEach(el => {
+                el.addEventListener('click', () => {
+                    const id = parseInt(el.getAttribute('data-id'));
+                    const found = history.find(h => h.id === id);
+                    if (found) document.getElementById('taskInput').value = found.task;
+                });
+            });
         }
 
         // ======================= EVENTI =======================
         document.addEventListener('DOMContentLoaded', () => {
             renderHistory();
-            
-            document.getElementById('analyzeBtn').addEventListener('click', () => {
+
+            document.getElementById('analyzeBtn').onclick = () => {
                 const task = document.getElementById('taskInput').value.trim();
-                if (!task) {
-                    alert('Scrivi cosa devi fare');
-                    return;
-                }
-                const guessed = analyzeTask(task);
-                document.getElementById('guessedCategory').innerText = guessed;
-                document.getElementById('confirmationBox').style.display = 'block';
+                if (!task) return alert('Scrivi cosa devi fare');
+                currentTask = task;
+                currentAnalysis = deepAnalyze(task);
+                renderAnalysis(currentAnalysis);
+                document.getElementById('analysisBox').style.display = 'block';
                 document.getElementById('resultBox').style.display = 'none';
                 document.getElementById('chatArea').style.display = 'none';
-                document.getElementById('manualCorrection').style.display = 'none';
-                
-                currentTask = task;
-                currentCategory = guessed;
-            });
-            
-            document.getElementById('confirmYes').addEventListener('click', () => {
-                const top3 = getTop3AI(currentCategory, currentTask);
-                currentTop3 = top3;
-                renderTop3(top3);
-                document.getElementById('confirmationBox').style.display = 'none';
+                document.getElementById('manualCorrectionAnalysis').style.display = 'none';
+            };
+
+            document.getElementById('acceptAnalysisBtn').onclick = () => {
+                currentCategory = currentAnalysis.suggestedCategory;
+                currentTop3 = getTop3AI(currentCategory);
+                renderTop3(currentTop3);
+                document.getElementById('analysisBox').style.display = 'none';
                 document.getElementById('resultBox').style.display = 'block';
                 document.getElementById('chatArea').style.display = 'block';
-                
-                if (top3 && top3.length > 0) {
-                    const exists = history.some(h => h.task === currentTask && h.category === currentCategory);
-                    if (!exists) {
-                        history.unshift({
-                            id: Date.now(),
-                            task: currentTask,
-                            category: currentCategory,
-                            top1: top3[0]?.nome || 'N/A',
-                            date: new Date().toISOString()
-                        });
-                        if (history.length > 20) history.pop();
-                        saveHistory();
-                        renderHistory();
-                    }
-                }
-            });
-            
-            document.getElementById('confirmNo').addEventListener('click', () => {
-                document.getElementById('manualCorrection').style.display = 'block';
-            });
-            
-            document.getElementById('manualConfirm').addEventListener('click', () => {
-                const newCat = document.getElementById('categorySelect').value;
-                currentCategory = newCat;
-                const top3 = getTop3AI(newCat, currentTask);
-                currentTop3 = top3;
-                renderTop3(top3);
-                document.getElementById('confirmationBox').style.display = 'none';
-                document.getElementById('resultBox').style.display = 'block';
-                document.getElementById('chatArea').style.display = 'block';
-                document.getElementById('manualCorrection').style.display = 'none';
-                
-                const exists = history.some(h => h.task === currentTask && h.category === newCat);
-                if (!exists && top3.length > 0) {
-                    history.unshift({
-                        id: Date.now(),
-                        task: currentTask,
-                        category: newCat,
-                        top1: top3[0]?.nome || 'N/A',
-                        date: new Date().toISOString()
-                    });
+                if (currentTop3.length) {
+                    history.unshift({ id: Date.now(), task: currentTask, category: currentCategory, top1: currentTop3[0].nome, date: new Date() });
                     if (history.length > 20) history.pop();
                     saveHistory();
                     renderHistory();
                 }
-            });
-            
-            document.getElementById('newChatBtn').addEventListener('click', () => {
+            };
+
+            document.getElementById('rejectAnalysisBtn').onclick = () => {
+                document.getElementById('manualCorrectionAnalysis').style.display = 'block';
+            };
+
+            document.getElementById('manualConfirmAnalysis').onclick = () => {
+                currentCategory = document.getElementById('categorySelectManual').value;
+                currentTop3 = getTop3AI(currentCategory);
+                renderTop3(currentTop3);
+                document.getElementById('analysisBox').style.display = 'none';
+                document.getElementById('resultBox').style.display = 'block';
+                document.getElementById('chatArea').style.display = 'block';
+                document.getElementById('manualCorrectionAnalysis').style.display = 'none';
+                if (currentTop3.length) {
+                    history.unshift({ id: Date.now(), task: currentTask, category: currentCategory, top1: currentTop3[0].nome, date: new Date() });
+                    if (history.length > 20) history.pop();
+                    saveHistory();
+                    renderHistory();
+                }
+            };
+
+            document.getElementById('newChatBtn').onclick = () => {
                 document.getElementById('taskInput').value = '';
+                document.getElementById('analysisBox').style.display = 'none';
                 document.getElementById('resultBox').style.display = 'none';
-                document.getElementById('confirmationBox').style.display = 'none';
                 document.getElementById('chatArea').style.display = 'none';
-                document.getElementById('manualCorrection').style.display = 'none';
-                document.getElementById('chatMessages').innerHTML = '<div class="message ai">👋 Ciao! Ora puoi chiedermi chiarimenti sulla top 3, correggere la categoria o approfondire qualsiasi AI.</div>';
-                window.waitingForCategory = false;
-                window.waitingForExplain = false;
-            });
-            
-            document.getElementById('sendChatBtn').addEventListener('click', () => {
+                document.getElementById('chatMessages').innerHTML = '<div class="message ai">👋 Ciao! Ora puoi chiedermi chiarimenti.</div>';
+            };
+
+            document.getElementById('sendChatBtn').onclick = () => {
                 const input = document.getElementById('chatInput');
                 const text = input.value.trim();
                 if (!text) return;
                 addChatMessage('user', text);
-                handleChatQuestion(text);
+                const q = text.toLowerCase();
+                if (q.includes('correggi')) {
+                    addChatMessage('ai', "Dimmi la nuova categoria: testo, audio, immagini, video, dati, codice, automazione, misto.");
+                } else if (q.includes('spiegami')) {
+                    addChatMessage('ai', "Scrivi il numero 1,2,3 per approfondire.");
+                } else if (!isNaN(parseInt(q)) && currentTop3[parseInt(q)-1]) {
+                    const ai = currentTop3[parseInt(q)-1];
+                    addChatMessage('ai', `📘 **${ai.nome}**\n\n${ai.punti_forza}\n\n🔒 ${ai.sicurezza}\n\n⚠️ ${ai.limiti}\n\n🔗 ${ai.url}`);
+                } else {
+                    addChatMessage('ai', "Scrivi 'correggi' o 'spiegami 1'");
+                }
                 input.value = '';
-            });
-            
-            document.getElementById('clearHistoryBtn').addEventListener('click', () => {
-                if (confirm('Cancellare tutto lo storico?')) {
+            };
+
+            document.getElementById('clearHistoryBtn').onclick = () => {
+                if (confirm('Cancellare storico?')) {
                     history = [];
                     saveHistory();
                     renderHistory();
                 }
-            });
+            };
         });
     </script>
 </body>
