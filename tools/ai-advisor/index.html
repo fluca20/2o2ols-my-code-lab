@@ -473,20 +473,52 @@
         function renderHistory() {
             const historyDiv = document.getElementById('historyList');
             if (!historyDiv) return;
-            if (history.length === 0) { historyDiv.innerHTML = '<p style="color:#64748b;">Nessuna ricerca</p>'; return; }
+    
+            if (history.length === 0) {
+                historyDiv.innerHTML = '<p style="color:#64748b;">Nessuna ricerca salvata</p>';
+                return;
+            }
+    
             historyDiv.innerHTML = history.map((item, idx) => `
-                <div class="history-item" data-id="${item.id}">
-                    <strong>📌 ${item.task.substring(0, 60)}</strong><br>🏆 ${item.top1}<br>📅 ${new Date(item.date).toLocaleString()}
+                <div class="history-item" data-id="${item.id}" style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+                    <div style="flex: 1; cursor: pointer;">
+                        <strong>📌 ${item.task.substring(0, 60)}${item.task.length > 60 ? '...' : ''}</strong><br>
+                        🏆 Top: ${item.top1}<br>
+                        🕒 ${new Date(item.date).toLocaleString()}
+                    </div>
+                    <button class="delete-history-btn" data-id="${item.id}" style="background: #ef4444; padding: 6px 12px; margin: 0;">🗑️</button>
                 </div>
             `).join('');
+    
+            // Click per riaprire la chat (sul div principale)
             document.querySelectorAll('.history-item').forEach(el => {
-                el.addEventListener('click', () => {
-                    const id = parseInt(el.getAttribute('data-id'));
-                    const found = history.find(h => h.id === id);
-                    if (found) document.getElementById('taskInput').value = found.task;
-                });
+                const clickDiv = el.querySelector('div:first-child');
+                if (clickDiv) {
+                    clickDiv.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const id = parseInt(el.getAttribute('data-id'));
+                        const found = history.find(h => h.id === id);
+                        if (found) {
+                            document.getElementById('taskInput').value = found.task;
+                            document.getElementById('analyzeBtn').click();
+                        }
+                    });
+                }
             });
-        }
+    
+        // Click per eliminare (sul bottone)
+        document.querySelectorAll('.delete-history-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = parseInt(btn.getAttribute('data-id'));
+                if (confirm('Eliminare questa chat dallo storico?')) {
+                    history = history.filter(h => h.id !== id);
+                }
+                saveHistory();
+                renderHistory();
+            });
+        });
+    }
 
         // ======================= EVENTI =======================
         document.addEventListener('DOMContentLoaded', () => {
