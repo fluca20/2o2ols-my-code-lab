@@ -392,38 +392,91 @@
 
         // ======================= ANALISI PROFONDA =======================
         function deepAnalyze(text) {
+            const lower = text.toLowerCase();
+            const length = text.length;
             const wordCount = text.split(/\s+/).length;
             const hasHeaders = /^#+\s|^\d+\.\s|^[A-Z][a-z]+:/m.test(text);
+            const hasNumbers = /\d+(?:[.,]\d+)?%?/.test(text);
             const hasCode = /```|\bfunction\b|\bdef\b|\bimport\b|\bconst\b|\blet\b|<[^>]+>/.test(text);
+    
+            // === NUOVE DETECTION ===
+            const hasSEO = /\btitolo\b|\bdescrizione\b|\btag\b|\bhashtag\b|\bSEO\b|\bpubblicare\b|\bclip\b|\bvideo breve\b|\bYouTube\b|\bTikTok\b|\bInstagram\b|\bsocial\b/i.test(text);
             const hasTechnical = /\bAPI\b|\bscript\b|\bconfigurazione\b|\bautomazione\b|\bprofilo\b|\bOBS\b|\bstreaming\b|\bregistrare\b/i.test(text);
-            const hasCreative = /\bimmagine\b|\bfoto\b|\bdisegno\b|\bcreativo\b/i.test(text);
-            const hasAudio = /\baudio\b|\btrascrivere\b|\bregistrazione\b/i.test(text);
-            const hasVideo = /\bvideo\b|\bmontaggio\b/i.test(text);
-            const hasData = /\bdati\b|\btabella\b|\bcsv\b|\banalisi\b/i.test(text);
-            
+            const hasCreative = /\bimmagine\b|\bfoto\b|\bdisegno\b|\bcreativo\b|\bdesign\b|\bsfondo\b/i.test(text);
+            const hasAudio = /\baudio\b|\btrascrivere\b|\bregistrazione\b|\bvoce\b/i.test(text);
+            const hasVideo = /\bvideo\b|\bmontaggio\b|\bmodifica video\b|\bclip\b/i.test(text);
+            const hasData = /\bdati\b|\btabella\b|\bcsv\b|\bexcel\b|\banalisi\b/i.test(text);
+            const hasTextGen = /\bscrivere\b|\barticolo\b|\btraduci\b|\briassunto\b|\bemail\b|\bpost\b|\bdescrizione\b|\btitolo\b|\btag\b/i.test(text);
+    
+            // Determinazione categoria avanzata
             let category = "misto";
-            if (hasTechnical && (text.includes("OBS") || text.includes("profilo"))) category = "automazione";
-            else if (hasCode) category = "codice";
-            else if (hasAudio) category = "audio";
-            else if (hasCreative) category = "immagini";
-            else if (hasVideo) category = "video";
-            else if (hasData) category = "dati";
-            else if (/scrivere|articolo|traduci/i.test(text)) category = "testo";
-            
-            return { suggestedCategory: category, hasCode, hasTechnical, hasCreative, hasAudio, hasVideo, hasData, wordCount, hasHeaders };
+            let confidence = 50;
+    
+            // PRIORITÀ ALTA per SEO / social media
+            if (hasSEO && (lower.includes("titolo") || lower.includes("descrizione") || lower.includes("tag"))) {
+                category = "testo";
+                confidence = 95;
+            }
+            else if (hasTechnical && (lower.includes("obs") || lower.includes("profilo") || lower.includes("configura"))) {
+                category = "automazione";
+                confidence = 95;
+            }
+            else if (hasCode || lower.includes("codice") || lower.includes("python") || lower.includes("javascript")) {
+                category = "codice";
+                confidence = 90;
+            }
+            else if (hasAudio) {
+                category = "audio";
+                confidence = 85;
+            }
+            else if (hasCreative) {
+                category = "immagini";
+                confidence = 85;
+            }
+            else if (hasVideo) {
+                category = "video";
+                confidence = 85;
+            }
+            else if (hasData) {
+                category = "dati";
+                confidence = 80;
+            }
+            else if (hasTextGen) {
+                category = "testo";
+                confidence = 80;
+            }
+    
+            return {
+                length: length,
+                wordCount: wordCount,
+                hasHeaders: hasHeaders,
+                hasNumbers: hasNumbers,
+                hasCode: hasCode,
+                hasSEO: hasSEO,
+                hasTechnical: hasTechnical,
+                hasCreative: hasCreative,
+                hasAudio: hasAudio,
+                hasVideo: hasVideo,
+                hasData: hasData,
+                hasTextGen: hasTextGen,
+                suggestedCategory: category,
+                confidence: confidence
+            };
         }
 
         function renderAnalysis(analysis) {
             const html = `
-                <p>📏 <strong>Parole:</strong> ${analysis.wordCount}</p>
-                <p>📑 <strong>Intestazioni:</strong> ${analysis.hasHeaders ? "✅ Sì" : "❌ No"}</p>
+                <p>📏 <strong>Lunghezza:</strong> ${analysis.length} caratteri (circa ${analysis.wordCount} parole)</p>
+                <p>📑 <strong>Intestazioni/titoli:</strong> ${analysis.hasHeaders ? "✅ Sì" : "❌ No"}</p>
+                <p>🔢 <strong>Numeri/dati:</strong> ${analysis.hasNumbers ? "✅ Sì" : "❌ No"}</p>
+                <p>📢 <strong>SEO/Social (titoli, tag, descrizioni):</strong> ${analysis.hasSEO ? "✅ Sì" : "❌ No"}</p>
                 <p>💻 <strong>Codice presente:</strong> ${analysis.hasCode ? "✅ Sì" : "❌ No"}</p>
-                <p>⚙️ <strong>Contenuto tecnico/OBS:</strong> ${analysis.hasTechnical ? "✅ Sì" : "❌ No"}</p>
-                <p>🎨 <strong>Immagini:</strong> ${analysis.hasCreative ? "✅ Sì" : "❌ No"}</p>
+                <p>⚙️ <strong>Contenuto tecnico/configurazione:</strong> ${analysis.hasTechnical ? "✅ Sì" : "❌ No"}</p>
+                <p>🎨 <strong>Contenuto creativo/immagini:</strong> ${analysis.hasCreative ? "✅ Sì" : "❌ No"}</p>
                 <p>🎵 <strong>Audio:</strong> ${analysis.hasAudio ? "✅ Sì" : "❌ No"}</p>
                 <p>🎬 <strong>Video:</strong> ${analysis.hasVideo ? "✅ Sì" : "❌ No"}</p>
-                <p>📊 <strong>Dati:</strong> ${analysis.hasData ? "✅ Sì" : "❌ No"}</p>
-                <p>🎯 <strong>Categoria suggerita:</strong> <strong>${analysis.suggestedCategory}</strong></p>
+                <p>📊 <strong>Dati/tabelle:</strong> ${analysis.hasData ? "✅ Sì" : "❌ No"}</p>
+                <p>🎯 <strong>Categoria suggerita:</strong> <strong>${analysis.suggestedCategory}</strong> (affidabilità: ${analysis.confidence}%)</p>
             `;
             document.getElementById('analysisDetails').innerHTML = html;
             document.getElementById('proposedCategory').innerText = analysis.suggestedCategory;
