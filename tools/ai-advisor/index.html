@@ -378,6 +378,10 @@
             // TESTO
             { nome: "Mistral Le Chat", categoria: "testo", url: "https://chat.mistral.ai", gratis: true, sicurezza: "No training", limiti: "Nessuno", punti_forza: "Italiano perfetto" },
             { nome: "Claude", categoria: "testo", url: "https://claude.ai", gratis: true, sicurezza: "Opzione anonima", limiti: "20 msg/8h", punti_forza: "Ragionamento profondo" },
+            // BENESSERE / AROMATERAPIA
+            { nome: "Perplexity AI", categoria: "testo", url: "https://perplexity.ai", gratis: true, sicurezza: "Anonimo possibile", limiti: "Leggero limite di ricerche", punti_forza: "Cerca online consigli su oli essenziali e dosaggi in tempo reale" },
+            { nome: "Microsoft Copilot", categoria: "testo", url: "https://copilot.microsoft.com", gratis: true, sicurezza: "Account Microsoft richiesto", limiti: "30 messaggi/chat", punti_forza: "Accesso a Bing, trova guide di aromaterapia" },
+            { nome: "Mistral Le Chat", categoria: "testo", url: "https://chat.mistral.ai", gratis: true, sicurezza: "No training", limiti: "Nessuno", punti_forza: "Se gli dai tu la tabella dosaggi, ragiona bene" },
             // TESTO - SEO / SOCIAL MEDIA
             { nome: "Copy.ai", categoria: "testo", url: "https://copy.ai", gratis: true, sicurezza: "Account richiesto, ma gratis", limiti: "2000 parole gratis/mese", punti_forza: "Template pronti per titoli, descrizioni, tag YouTube/TikTok/Instagram" },
             { nome: "Rytr", categoria: "testo", url: "https://rytr.me", gratis: true, sicurezza: "Account richiesto", limiti: "10.000 caratteri/mese gratis", punti_forza: "Ha caso d'uso 'SEO Meta Description' e 'Social Media Posts'" },
@@ -398,6 +402,7 @@
             const hasHeaders = /^#+\s|^\d+\.\s|^[A-Z][a-z]+:/m.test(text);
             const hasNumbers = /\d+(?:[.,]\d+)?%?/.test(text);
             const hasCode = /```|\bfunction\b|\bdef\b|\bimport\b|\bconst\b|\blet\b|<[^>]+>/.test(text);
+            const hasWellness = /\boli essenziali\b|\bdiffusore\b|\baroma\b|\bbenessere\b|\bquantità\b|\bdosaggio\b|\barsoma\b/i.test(text);
     
             // === NUOVE DETECTION ===
             const hasSEO = /\btitolo\b|\bdescrizione\b|\btag\b|\bhashtag\b|\bSEO\b|\bpubblicare\b|\bclip\b|\bvideo breve\b|\bYouTube\b|\bTikTok\b|\bInstagram\b|\bsocial\b/i.test(text);
@@ -444,6 +449,11 @@
             else if (hasTextGen) {
                 category = "testo";
                 confidence = 80;
+            }
+
+            if (hasWellness) {
+                category = "testo";
+                confidence = 95;
             }
     
             return {
