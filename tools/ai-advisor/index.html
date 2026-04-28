@@ -496,6 +496,18 @@
             let filtered = aiDatabase.filter(ai => ai.categoria === category);
             if (filtered.length === 0) filtered = aiDatabase.filter(ai => ai.categoria === 'misto');
             return filtered.slice(0,3);
+            // Se è un compito su oli essenziali / benessere / dosaggi
+            if (analysis.hasWellness) {
+                // Dai priorità a chi cerca online
+                const order = ["Perplexity AI", "Microsoft Copilot", "Mistral Le Chat"];
+                filtered.sort((a,b) => {
+                    let idxA = order.indexOf(a.nome);
+                    let idxB = order.indexOf(b.nome);
+                    if (idxA === -1) idxA = 999;
+                    if (idxB === -1) idxB = 999;
+                    return idxA - idxB;
+                });
+            }
         }
 
         function renderTop3(aiList) {
