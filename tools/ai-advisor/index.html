@@ -510,6 +510,37 @@
             }
         }
 
+        function getTop3AIWithSpecialRules(category, taskText, analysis) {
+            let filtered = aiDatabase.filter(ai => ai.categoria === category);
+            if (filtered.length === 0) filtered = aiDatabase.filter(ai => ai.categoria === 'misto');
+    
+            // REGOLA SPECIALE per oli essenziali / benessere / dosaggi
+            const isWellness = /oli essenziali|diffusore|aromaterapia|benessere|dosaggio|gocce|quantità/.test(taskText.toLowerCase());
+    
+            if (isWellness) {
+                // Ordine forzato: Perplexity > Copilot > Mistral > Claude
+                const priorityOrder = ["Perplexity AI", "Microsoft Copilot", "Mistral Le Chat", "Claude"];
+                filtered.sort((a, b) => {
+                    let indexA = priorityOrder.indexOf(a.nome);
+                    let indexB = priorityOrder.indexOf(b.nome);
+                    if (indexA === -1) indexA = 999;
+                    if (indexB === -1) indexB = 999;
+                    return indexA - indexB;
+                });
+            } else {
+                // Regola normale: gratis prima, poi nessun limite
+                filtered.sort((a, b) => {
+                    let scoreA = a.gratis ? 10 : 5;
+                    let scoreB = b.gratis ? 10 : 5;
+                    if (a.limiti === "Nessuno") scoreA += 5;
+                    if (b.limiti === "Nessuno") scoreB += 5;
+                    return scoreB - scoreA;
+                });
+            }
+    
+            return filtered.slice(0, 3);
+        }
+
         function renderTop3(aiList) {
             if (!aiList || aiList.length === 0) {
                 document.getElementById('top3List').innerHTML = '<p style="color:red;">Nessuna AI trovata</p>';
@@ -611,20 +642,31 @@
                 document.getElementById('manualCorrectionAnalysis').style.display = 'none';
             };
 
-            document.getElementById('acceptAnalysisBtn').onclick = () => {
+            document.getElementById('acceptAnalysisBtn').addEventListener('click', () => {
                 currentCategory = currentAnalysis.suggestedCategory;
-                currentTop3 = getTop3AI(currentCategory);
-                renderTop3(currentTop3);
+                const top3 = getTop3AIWithSpecialRules(currentCategory, currentTask, currentAnalysis);
+                currentTop3 = top3;
+                renderTop3(top3);
                 document.getElementById('analysisBox').style.display = 'none';
                 document.getElementById('resultBox').style.display = 'block';
                 document.getElementById('chatArea').style.display = 'block';
-                if (currentTop3.length) {
-                    history.unshift({ id: Date.now(), task: currentTask, category: currentCategory, top1: currentTop3[0].nome, date: new Date() });
-                    if (history.length > 20) history.pop();
-                    saveHistory();
-                    renderHistory();
+                
+                if (top3 && top3.length > 0) {
+                    const exists = history.some(h => h.task === currentTask && h.category === currentCategory);
+                    if (!exists) {
+                        history.unshift({
+                            id: Date.now(),
+                            task: currentTask,
+                            category: currentCategory,
+                            top1: top3[0]?.nome || 'N/A',
+                            date: new Date().toISOString()
+                        });
+                        if (history.length > 20) history.pop();
+                        saveHistory();
+                        renderHistory();
+                    }
                 }
-            };
+            });
 
             document.getElementById('rejectAnalysisBtn').onclick = () => {
                 document.getElementById('manualCorrectionAnalysis').style.display = 'block';
