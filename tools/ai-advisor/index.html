@@ -318,6 +318,7 @@
                             <option value="audio">Audio</option>
                             <option value="immagini">Immagini</option>
                             <option value="video">Video</option>
+                            <option value="raccomandazione">Raccomandazione contenuti (musica, playlist, ASMR)</option>
                             <option value="dati">Dati / Tabelle</option>
                             <option value="codice">Codice</option>
                             <option value="automazione">Automazione / Configurazione</option>
@@ -388,6 +389,10 @@
             { nome: "Mistral Le Chat", categoria: "testo", url: "https://chat.mistral.ai", gratis: true, sicurezza: "No training", limiti: "Nessuno", punti_forza: "Generico ma efficace, ottimo italiano" },
             // VIDEO
             { nome: "Runway ML", categoria: "video", url: "https://runwayml.com", gratis: true, sicurezza: "File temporanei", limiti: "125 crediti", punti_forza: "Editing video" },
+            // RACCOMANDAZIONE CONTENUTI (musica, playlist, sottofondo)
+            { nome: "Mistral Le Chat", categoria: "raccomandazione", url: "https://chat.mistral.ai", gratis: true, sicurezza: "No training", limiti: "Nessuno", punti_forza: "Conosce playlist Spotify, YouTube, ASMR. Ottima per consigli in italiano." },
+            { nome: "Perplexity AI", categoria: "raccomandazione", url: "https://perplexity.ai", gratis: true, sicurezza: "Anonimo possibile", limiti: "Qualche ricerca gratuita al giorno", punti_forza: "Cerca in tempo reale su Spotify/YouTube e dà link diretti." },
+            { nome: "You.com", categoria: "raccomandazione", url: "https://you.com", gratis: true, sicurezza: "Account opzionale", limiti: "Nessuno", punti_forza: "Motore di ricerca + AI, trova playlist e video sottofondo." },
             // DATI
             { nome: "Google Colab", categoria: "dati", url: "https://colab.research.google.com", gratis: true, sicurezza: "Account Google", limiti: "GPU limitata", punti_forza: "Analisi dati" },
             // MISTO
@@ -406,6 +411,7 @@
     
             // === NUOVE DETECTION ===
             const hasSEO = /\btitolo\b|\bdescrizione\b|\btag\b|\bhashtag\b|\bSEO\b|\bpubblicare\b|\bclip\b|\bvideo breve\b|\bYouTube\b|\bTikTok\b|\bInstagram\b|\bsocial\b/i.test(text);
+            const hasBackground = /\bsottofondo\b|\bplaylist\b|\bplay list\b|\bbrano\b|\bmusica\b|\bSpotify\b|\bASMR\b|\bintrattenimento\b/i.test(text);
             const hasTechnical = /\bAPI\b|\bscript\b|\bconfigurazione\b|\bautomazione\b|\bprofilo\b|\bOBS\b|\bstreaming\b|\bregistrare\b/i.test(text);
             const hasCreative = /\bimmagine\b|\bfoto\b|\bdisegno\b|\bcreativo\b|\bdesign\b|\bsfondo\b/i.test(text);
             const hasAudio = /\baudio\b|\btrascrivere\b|\bregistrazione\b|\bvoce\b/i.test(text);
@@ -420,6 +426,10 @@
             // PRIORITÀ ALTA per SEO / social media
             if (hasSEO && (lower.includes("titolo") || lower.includes("descrizione") || lower.includes("tag"))) {
                 category = "testo";
+                confidence = 95;
+            }
+            if (hasBackground && (lower.includes("sottofondo") || lower.includes("playlist") || lower.includes("musica") || lower.includes("spotify"))) {
+                category = "raccomandazione";
                 confidence = 95;
             }
             else if (hasTechnical && (lower.includes("obs") || lower.includes("profilo") || lower.includes("configura"))) {
