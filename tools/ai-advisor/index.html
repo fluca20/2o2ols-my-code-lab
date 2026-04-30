@@ -706,24 +706,47 @@
                 document.getElementById('chatMessages').innerHTML = '<div class="message ai">👋 Ciao! Ora puoi chiedermi chiarimenti.</div>';
             };
 
-            document.getElementById('sendChatBtn').onclick = () => {
+            document.getElementById('sendChatBtn').addEventListener('click', () => {
                 const input = document.getElementById('chatInput');
                 const text = input.value.trim();
                 if (!text) return;
                 addChatMessage('user', text);
+    
                 const q = text.toLowerCase();
-                if (q.includes('correggi')) {
-                    addChatMessage('ai', "Dimmi la nuova categoria: testo, audio, immagini, video, dati, codice, automazione, misto.");
-                } else if (q.includes('spiegami')) {
-                    addChatMessage('ai', "Scrivi il numero 1,2,3 per approfondire.");
-                } else if (!isNaN(parseInt(q)) && currentTop3[parseInt(q)-1]) {
-                    const ai = currentTop3[parseInt(q)-1];
-                    addChatMessage('ai', `📘 **${ai.nome}**\n\n${ai.punti_forza}\n\n🔒 ${ai.sicurezza}\n\n⚠️ ${ai.limiti}\n\n🔗 ${ai.url}`);
-                } else {
-                    addChatMessage('ai', "Scrivi 'correggi' o 'spiegami 1'");
+    
+                // NUOVO: rileva richiesta di guida / codice
+                if (q.includes("guida") || q.includes("passo passo") || q.includes("crea il codice") || q.includes("scrivimi il codice") || q.includes("come faccio") || q.includes("fammi la guida")) {
+                    if (currentTop3 && currentTop3.length > 0) {
+                        addChatMessage('ai', `📘 **Guida passo passo per creare il codice**\n\n1️⃣ Apri il link dell'AI #1: **${currentTop3[0].nome}** → ${currentTop3[0].url}\n2️⃣ Incolla questa richiesta:\n\n---\n${currentTask}\n\n---\n3️⃣ Chiedi: "Generami il codice HTML/JS completo e funzionante con tutti i requisiti"\n4️⃣ Copia il codice, salvalo come file .html e aprilo nel browser\n\n✅ Vuoi che ti scriva la richiesta esatta da copiare? (Rispondi "sì" o "no")`);
+                    } else {
+                        addChatMessage('ai', "Prima esegui l'analisi cliccando 'Analizza in profondità e trova Top 3 AI'");
+                    }
+                    input.value = '';
+                    return;
                 }
-                input.value = '';
-            };
+    
+    // risposta per "sì" dopo la guida
+    if (q === "sì" || q === "si") {
+        addChatMessage('ai', `**📋 Richiesta esatta da copiare:**\n\n\`\`\`\n${currentTask}\n\nGenerami il codice HTML/JS completo e funzionante che implementa tutto questo. Deve essere interattivo, con moduli, domande e risposte, e funzionare nel browser.\n\`\`\`\n\nCopia questo testo e incollalo nell'AI #1 (${currentTop3[0]?.nome})`);
+        input.value = '';
+        return;
+    }
+    
+    if (q.includes('correggi') || q.includes('categoria')) {
+        addChatMessage('ai', "Dimmi la nuova categoria tra: testo, audio, immagini, video, dati, codice, automazione, raccomandazione, misto.");
+    } 
+    else if (q.includes('spiegami')) {
+        addChatMessage('ai', "Scrivi il numero 1, 2 o 3 per approfondire un'AI.");
+    } 
+    else if (!isNaN(parseInt(q)) && parseInt(q) >= 1 && parseInt(q) <= 3) {
+        const ai = currentTop3[parseInt(q)-1];
+        if (ai) addChatMessage('ai', `📘 **${ai.nome}**\n\n💪 ${ai.punti_forza}\n\n🔒 ${ai.sicurezza}\n\n⚠️ ${ai.limiti}\n\n🔗 ${ai.url}`);
+    } 
+    else {
+        addChatMessage('ai', "Posso aiutarti:\n📌 'correggi' → cambiare categoria\n📌 'spiegami 1' → approfondire un'AI\n📌 'guida passo passo' → farti creare il codice\n📌 'sì' → dopo che ti ho offerto la guida");
+    }
+    input.value = '';
+});
 
             document.getElementById('clearHistoryBtn').onclick = () => {
                 if (confirm('Cancellare storico?')) {
